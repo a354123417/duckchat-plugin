@@ -22,7 +22,7 @@
     </div>
     <div class="red-center">
         <!--        <div class="red-open-buttom" id="grab-red">開</div>-->
-        <button class="red-open-buttom" onclick="grabRedPacket()">開</button>
+        <button class="red-open-buttom" onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
     </div>
 </div>
 
@@ -33,15 +33,17 @@
 
 <script type="text/javascript">
 
-    function grabRedPacket() {
+    function grabRedPacket(packetId) {
         var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.grab";
 
+        alert("packetId=" + packetId);
+
         var data = {
-            "packetId": "10001",
+            "packetId": packetId,
         };
 
         alert("url=" + url);
-        zalyjsCommonAjaxPostJson(url, data, grabResponse)
+        zalyjsCommonAjaxPostJson(url, data, grabResponse);
     }
 
     function grabResponse(url, data, result) {

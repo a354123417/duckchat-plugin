@@ -138,7 +138,7 @@ abstract class MiniProgramController extends \Wpf_Controller
         $pageType = isset($queries['page']) ? $queries['page'] : "";
 
         $params = [
-            "toId" => $queries['x'],
+            "roomId" => $queries['x'],
         ];
 
         if ("groupMsg" == $pageType) {
@@ -148,8 +148,6 @@ abstract class MiniProgramController extends \Wpf_Controller
         } else {
             throw new Exception("none support pageType");
         }
-
-        error_log("===============params=" . var_export($params, true));
         return $params;
     }
 

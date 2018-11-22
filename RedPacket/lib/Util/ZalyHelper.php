@@ -18,6 +18,13 @@ class ZalyHelper
         return $msectime;
     }
 
+    public static function getCurrentTimeMillis()
+    {
+        list($msec, $sec) = explode(' ', microtime());
+        $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+        return $msectime;
+    }
+
     public function getCurrentTimeSeconds()
     {
         list($msec, $sec) = explode(' ', microtime());
@@ -25,7 +32,7 @@ class ZalyHelper
         return $msectime;
     }
 
-    public function generateStrKey($length = 16, $strParams = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    public static function generateRandomKey($length = 16, $strParams = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
         if (!is_int($length) || $length < 0) {
             $length = 16;
@@ -39,7 +46,7 @@ class ZalyHelper
         return $str;
     }
 
-    public function generateStrId()
+    public static function generateUUID()
     {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
 

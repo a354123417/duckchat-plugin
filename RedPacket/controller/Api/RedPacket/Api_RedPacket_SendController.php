@@ -13,7 +13,7 @@ class Api_RedPacket_SendController extends MiniRedController
      */
     protected function doGet()
     {
-        // TODO: Implement doGet() method.
+
     }
 
     /**
@@ -22,23 +22,52 @@ class Api_RedPacket_SendController extends MiniRedController
     protected function doPost()
     {
         $params = [
-            "errCode" => "success",
+            "errCode" => "error",
         ];
 
-        if ("success" == $params['errCode']) {
-            $this->proxyRedPacketMessage();
+        $userId = $this->userId;
+        $total = trim($_POST['total']);
+        $quality = trim($_POST['quality']);
+        $description = trim($_POST['description']);
+
+        $requestParams = $this->getRequestParams();
+        $isGroup = $requestParams['isGroup'];
+        $roomId = $requestParams['roomId'];
+
+
+        $packetId = ZalyHelper::generateRandomKey(16);
+
+        $result = $this->sendRedPacket($packetId, $userId, $total, $quality, $description, $isGroup, $roomId);
+
+        if ($result) {
+            $params["errCode"] = "success";
+            $this->proxyRedPacketMessage($packetId, $isGroup, $roomId);
         }
 
         echo json_encode($params);
         return;
     }
 
-    private function proxyRedPacketMessage()
+
+    private function sendRedPacket($packetId, $userId, $totalAmount, $quantity, $description, $isGroup, $roomId)
     {
-        $requestParams = $this->getRequestParams();
+        $data = [
+            "packetId" => $packetId,
+            "userId" => $userId,
+            "totalAmount" => $totalAmount,
+            "quantity" => $quantity,
+            "description" => $description,
+            "isGroup" => $isGroup,
+            "roomId" => $roomId,
+        ];
+
+        return $this->ctx->DuckChatRedPacketDao->insertRedPacket($data);
+    }
+
+    private function proxyRedPacketMessage($packetId, $isGroup, $roomId)
+    {
         $fromUserId = $this->userId;
-        $isGroup = $requestParams["isGroup"];
-        $toId = $requestParams["toId"];
+        $toId = $roomId;
 
         $title = "[红包]";
         $width = 230;
@@ -70,7 +99,7 @@ class Api_RedPacket_SendController extends MiniRedController
                         </body>
                         </html>';
         $webCode = str_replace(PHP_EOL, "", $webCode);
-        $gotoUrl = "http://192.168.3.4:8088/index.php?action=page.grab";
+        $gotoUrl = "http://192.168.3.4:8088/index.php?action=page.grab?packetId=" . $packetId;
         $this->dcApi->sendWebMessage($isGroup, $fromUserId, $toId, $title, $webCode, $width, $height, $gotoUrl);
     }
 }

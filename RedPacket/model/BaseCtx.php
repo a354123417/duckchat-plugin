@@ -3,6 +3,10 @@
 /**
  * Class BaseCtx
  *
+ * @property DuckChatUserAccountDao DuckChatUserAccountDao
+ * @property DuckChatRedPacketDao DuckChatRedPacketDao
+ * @property DuckChatRedPacketGrabberDao DuckChatRedPacketGrabberDao
+ *
  * @property ZalyRedis ZalyRedis
  * @property ZalyMysql ZalyMysql
  * @property Wpf_Logger Wpf_Logger
@@ -14,7 +18,7 @@
  */
 class BaseCtx extends Wpf_Ctx
 {
-    private $logger;
+    protected $logger;
     public $db;
 
     public function __construct()

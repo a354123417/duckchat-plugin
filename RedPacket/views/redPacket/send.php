@@ -181,12 +181,11 @@
         var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.send";
 
         var data = {
-            "hello": "helli",
+            "total": 10,
+            "quality": 10,
+            "description": "",
         };
-
-        alert("url=" + url);
         zalyjsCommonAjaxPostJson(url, data, sendResponse)
-
     }
 
     function sendResponse(url, data, result) {

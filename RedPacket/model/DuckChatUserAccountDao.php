@@ -6,19 +6,14 @@
  * Time: 8:00 PM
  */
 
-class PlatformSiteDao extends BaseCtx
+class DuckChatUserAccountDao extends BaseCtx
 {
-
-    private $table = "platformSite";
+    private $table = "DuckChatUserAccount";
 
     private $columns = [
-        "siteId",           // sitePubkBase64 -> sha1()
-        "sitePubkPem",
-        "siteAddress",
-        "siteName",
-        "siteLogo",
-        "status",
-        "updateTime"
+        "id",
+        "userId",
+        "amount",
     ];
 
     private $queryColumns;
@@ -29,7 +24,7 @@ class PlatformSiteDao extends BaseCtx
         $this->queryColumns = implode(",", $this->columns);
     }
 
-    public function saveSiteData($data)
+    public function addUserAccount($data)
     {
         return parent::saveData($this->table, $data, $this->columns);
     }

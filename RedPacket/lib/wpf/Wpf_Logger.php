@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: childeYin<尹少爷>
@@ -15,13 +16,13 @@ class Wpf_Logger
 
     private $fileName = 'openzaly-platform-log';
     private $filePath = '/akaxin/';
-    private $handler  = '';
-    private $logType  = "";
+    private $handler = '';
+    private $logType = "";
 
     public function __construct()
     {
-        $this->fileName = $this->fileName."-".date("Ymd").".log";
-        $this->filePath = $this->filePath."/".$this->fileName;
+        $this->fileName = $this->fileName . "-" . date("Ymd") . ".log";
+        $this->filePath = $this->filePath . "/" . $this->fileName;
 //        $this->handler = fopen($this->filePath, "a+");
     }
 
@@ -46,11 +47,11 @@ class Wpf_Logger
 
     private function writeLog($tag, $msg)
     {
-        if(!in_array($this->logType, $this->_level)) {
-            return ;
+        if (!in_array($this->logType, $this->_level)) {
+            return;
         }
 
-        if(is_array($msg)) {
+        if (is_array($msg)) {
             $msg = json_encode($msg);
         }
 
@@ -59,15 +60,22 @@ class Wpf_Logger
         error_log($content);
     }
 
-    public function writeSqlLog($tag, $sql, $params, $expendTimes)
+    public function writeSqlLog($tag, $sql, $params, $startTimeMillis)
     {
         if (is_array($params)) {
             $params = json_encode($params);
         }
         $this->logType = "sql";
 
+        $expendTimes = $this->getCurrentTimeMillis() - $startTimeMillis;
         $content = "[$this->logType] " . date("Y-m-d H:i:s") . " $tag  sql=$sql  params=$params  expend_time=$expendTimes\n";
-//        fwrite($this->handler, $content);
         error_log($content);
+    }
+
+    public function getCurrentTimeMillis()
+    {
+        list($msec, $sec) = explode(' ', microtime());
+        $msectime = (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+        return $msectime;
     }
 }

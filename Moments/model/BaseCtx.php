@@ -6,7 +6,7 @@
  *
  * @property PlatformSessionCtx PlatformSessionCtx
  * @property PlatformUserCtx PlatformUserCtx
- * @property PlatformSiteDao PlatformSiteDao
+ * @property DuckChatUserAccountDao PlatformSiteDao
  * @property PlatformUserDeviceDao PlatformUserDeviceDao
  *
  * @property ZalyRedis ZalyRedis

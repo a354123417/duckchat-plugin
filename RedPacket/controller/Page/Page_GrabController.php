@@ -13,16 +13,20 @@ class Page_GrabController extends MiniRedController
      */
     protected function doGet()
     {
-        error_log("===========do get request");
         $this->getRequestParams();
 
-        $type = $_GET['type'];
+        $packetId = $_GET['packetId'];
 
-        if (isset($type)) {
-            echo $this->display("redPacket_grabber", []);
+        $isGrabber = $this->isPacketGrabber($packetId, $this->userId);
+
+        $params = [
+            'packetId' => $packetId,
+        ];
+
+        if ($isGrabber) {
+            echo $this->display("redPacket_grabber", $params);
         } else {
-            //判断用户是否抢过红包
-            echo $this->display("redPacket_grab", []);
+            echo $this->display("redPacket_grab", $params);
         }
 
         return;
@@ -37,6 +41,16 @@ class Page_GrabController extends MiniRedController
         error_log("===========do post request");
 
         return;
+    }
+
+    private function isPacketGrabber($packetId, $userId)
+    {
+        $grabber = $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId, $userId);
+
+        if ($grabber) {
+            return true;
+        }
+        return false;
     }
 
 }
