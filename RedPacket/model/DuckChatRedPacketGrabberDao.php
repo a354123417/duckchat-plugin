@@ -38,19 +38,25 @@ class DuckChatRedPacketGrabberDao extends BaseCtx
         return $this->updateData($this->table, $where, $data, $this->columns);
     }
 
-    public function queryRedPacketGrabbers($packetId, $userId)
+    public function queryRedPacketGrabbers($packetId, $userId = false)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $startTime = $this->getCurrentTimeMills();
-        $sql = "select $this->queryColumns from $this->table where packetId=:packetId and userId=:userId;";
+        $sql = "select $this->queryColumns from $this->table where packetId=:packetId ";
+
+        if ($userId) {
+            $sql .= "and userId=:userId";
+        }
 
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue(":packetId", $packetId);
-            $prepare->bindValue(":userId", $userId);
+            if ($userId) {
+                $prepare->bindValue(":userId", $userId);
+            }
             $flag = $prepare->execute();
-            $result = $prepare->fetch(\PDO::FETCH_ASSOC);
+            $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
             if ($flag && $result) {
                 return $result;
             }

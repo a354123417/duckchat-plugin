@@ -19,12 +19,29 @@ abstract class MiniRedController extends MiniProgramController
 
     /**
      * preRequest && doRequest 发生异常情况，执行
-     * @param $ex
+     * @param Exception $ex
      * @return mixed
      */
     protected function requestException($ex)
     {
         error_log("===============" . $ex);
+        echo $ex->getMessage() . "->" . $ex->getTraceAsString();
     }
 
+
+    protected function getRedPacketInfo($packetId)
+    {
+        return $this->ctx->DuckChatRedPacketDao->queryRedPacket($packetId);
+    }
+
+    protected function getRedPacketGrabbers($packetId)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        try {
+            return $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId);
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        }
+        return [];
+    }
 }

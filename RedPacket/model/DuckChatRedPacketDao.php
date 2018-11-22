@@ -65,7 +65,7 @@ class DuckChatRedPacketDao extends BaseCtx
         } finally {
             $this->logger->writeSqlLog($tag, $sql, $packetId, $startTime);
         }
-        return null;
+        return false;
     }
 
 }

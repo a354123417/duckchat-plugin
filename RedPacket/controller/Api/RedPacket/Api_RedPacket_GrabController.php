@@ -13,7 +13,7 @@ class Api_RedPacket_GrabController extends MiniRedController
      */
     protected function doGet()
     {
-        // TODO: Implement doGet() method.
+        return true;
     }
 
     /**
@@ -27,25 +27,46 @@ class Api_RedPacket_GrabController extends MiniRedController
 
         $packetId = trim($_POST['packetId']);
 
-        $result = $this->grabRedPacket($packetId, $this->userId);
+        $redPacketInfo = $this->getRedPacketInfo($packetId);
 
+        if (!$redPacketInfo) {
+            throw new  Exception("红包已经失效");
+        }
 
-        if ($result) {
+        $totalAmount = $redPacketInfo['totalAmount'];
+
+        $grabbers = $this->getRedPacketGrabbers($packetId);
+        $grabberCount = empty($grabbers) ? 0 : count($grabbers);
+
+        if ($grabberCount < $totalAmount) {
+            //抢光了
+            $result = $this->saveGrabRedPacket($packetId, $this->userId);
+            if ($result) {
+                $result['errCode'] = "success";
+            }
+        } else {
             $result['errCode'] = "success";
         }
+
 
         echo json_encode($params);
         return;
     }
 
-    private function grabRedPacket($packetId, $userId)
+    private function saveGrabRedPacket($packetId, $userId, $amount)
     {
         $data = [
             "packetId" => $packetId,
             "userId" => $userId,
-            "amount" => 2.0,
+            "amount" => $amount,
         ];
 
         return $this->ctx->DuckChatRedPacketGrabberDao->insertGrabbers($data);
     }
+
+    private function calculate($leftAmount, $leftNum)
+    {
+
+    }
+
 }

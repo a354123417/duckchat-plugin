@@ -17,13 +17,38 @@ class Page_GrabController extends MiniRedController
 
         $packetId = $_GET['packetId'];
 
+
+        $redPacketInfo = $this->getRedPacketInfo($packetId);
+
+        if (!$redPacketInfo) {
+            throw new Exception("红包已经失效");
+        }
+
+        $redPacketAmount = $redPacketInfo["totalAmount"];
+        $redPacketQuantity = $redPacketInfo["quantity"];
+        $redPacketSendTime = $redPacketInfo["sendTime"];
+        $redPacketFinishTime = $redPacketInfo["finishTime"];
+        $redPacketDesc = $redPacketInfo["description"];
+        $sendUserId = $redPacketInfo["userId"];
+
+        $sendUserProfile = $this->dcApi->getUserProfile($sendUserId);
+
+        $sendUserNickname = '';
+
         $isGrabber = $this->isPacketGrabber($packetId, $this->userId);
 
         $params = [
             'packetId' => $packetId,
+            'redPacketQuantity' => $redPacketQuantity,
+            'sendUserNickname' => $sendUserNickname,
+            'redPacketAmount' => $redPacketAmount,
+            'redPacketDesc' => $redPacketDesc,
         ];
 
         if ($isGrabber) {
+            //get grabbers
+            $grabbers = $this->getRedPacketGrabbers($packetId);
+            $params['redPacketGrabbers'] = $grabbers;
             echo $this->display("redPacket_grabber", $params);
         } else {
             echo $this->display("redPacket_grab", $params);
@@ -37,17 +62,14 @@ class Page_GrabController extends MiniRedController
      */
     protected function doPost()
     {
-        // TODO: Implement doPost() method.
-        error_log("===========do post request");
-
-        return;
+        return true;
     }
 
     private function isPacketGrabber($packetId, $userId)
     {
         $grabber = $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId, $userId);
 
-        if ($grabber) {
+        if ($grabber && count($grabber) > 0) {
             return true;
         }
         return false;
