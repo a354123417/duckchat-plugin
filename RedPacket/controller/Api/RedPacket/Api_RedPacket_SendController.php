@@ -43,7 +43,7 @@ class Api_RedPacket_SendController extends MiniRedController
         $title = "[红包]";
         $width = 230;
         $height = 84;
-        $cssAddress = "http://192.168.3.4:8088/public/manage/red.css?version=1";
+        $cssAddress = "http://192.168.3.4:8088/public/manage/red.css?version=200";
         $iconAddress = "http://192.168.3.4:8088/public/img/red-icon.png";
         $webCode = '<!DOCTYPE html>
                         <html>

@@ -16,8 +16,15 @@ class Page_GrabController extends MiniRedController
         error_log("===========do get request");
         $this->getRequestParams();
 
-        //判断用户是否抢过红包
-        echo $this->display("redPacket_grabber", []);
+        $type = $_GET['type'];
+
+        if (isset($type)) {
+            echo $this->display("redPacket_grabber", []);
+        } else {
+            //判断用户是否抢过红包
+            echo $this->display("redPacket_grab", []);
+        }
+
         return;
     }
 
