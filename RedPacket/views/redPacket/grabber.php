@@ -21,16 +21,53 @@
         <div class="red-amount">1.12 元</div>
     </div>
 
-    <div class="red-details">
+    <div class="layout-all-row">
 
-    </div>
+        <div class="list-item-center">
+            <div class="item-title">
+                <div class="item-title-content">
+                    8个红包，50秒被抢光
+                </div>
+            </div>
+            <div class="division-line"></div>
 
-    <div class="red-details">
-        <div class="red-details-title" id="grab-red">8个红包，50秒被抢光</div>
-        <div class="division-line"></div>
+            <div class="item-row">
+                <div class="item-header">
+                    <img class="grabber-avatar"
+                         src="http://www.jituwang.com/uploads/allimg/151003/258203-1510030RP894.jpg"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">我的朋友们</div>
 
-        <div class="red-open-buttom" id="grab-red">開</div>
-        <div class="division-line"></div>
+                        <div class="item-body-tail">
+                            2.12元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+            <div class="item-row">
+                <div class="item-header">
+                    <img class="grabber-avatar"
+                         src="http://www.jituwang.com/uploads/allimg/151003/258203-1510030RP894.jpg"/>
+                </div>
+                <div class="item-body">
+                    <div class="item-body-display">
+                        <div class="item-body-desc">我的朋友们</div>
+
+                        <div class="item-body-tail">
+                            2.12元
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="division-line"></div>
+
+
+        </div>
+
     </div>
 </div>
 
