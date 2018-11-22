@@ -1,0 +1,68 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.red_packet_content {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    background: rgba(223, 84, 88, 1);
+    border-radius: 0px 4px 4px 4px;
+    height: 75%;
+}
+
+.red_packet_tail {
+    background: rgba(255, 255, 255, 1);
+    border-radius: 0px 0px 2px 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 25%;
+}
+
+.red-icon {
+    width: 34px;
+    height: 40px;
+    margin: 0 10px 11px 10px;
+}
+
+.red-desc {
+    margin-top: 12px;
+    text-align: left;
+}
+
+.red-desc-text {
+    font-size: 16px;
+    height: 16px;
+    line-height: 16px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+}
+
+.red-see-text {
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 1);
+    margin-top: 7px;
+}
+
+.tail-text {
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(157, 155, 159, 1);
+    line-height: 12px;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
