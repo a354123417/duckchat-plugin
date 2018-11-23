@@ -18,6 +18,8 @@ class Page_GrabController extends MiniRedController
         $packetId = $_GET['packetId'];
 
 
+        error_log("===============" . var_export($_GET, true));
+
         $redPacketInfo = $this->getRedPacketInfo($packetId);
 
         if (!$redPacketInfo) {

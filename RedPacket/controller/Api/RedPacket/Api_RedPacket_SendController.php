@@ -26,7 +26,6 @@ class Api_RedPacket_SendController extends MiniRedController
             "errCode" => "error",
         ];
 
-
         try {
             $userId = $this->userId;
             $sendAmount = trim($_POST['total']);
@@ -38,10 +37,12 @@ class Api_RedPacket_SendController extends MiniRedController
             $sendUserAccount = $this->getUserAccount($userId);
             $userAmount = $sendUserAccount["amount"];
             error_log("=============sendUserAccount amount =" . $userAmount);
+            error_log("=============sendUserAccount sendAmount =" . $sendAmount);
             if ($sendAmount > $userAmount) {
                 throw new Exception("账户余额不足，请联系站长充值");
             }
-            $packetId = ZalyHelper::generateRandomKey(16);
+
+            $packetId = ZalyHelper::generateRandomKey(16, "0123456789");
             $result = $this->sendRedPacket($packetId, $userId, $userAmount, $sendAmount, $quality, $description, $isGroup, $roomId);
             if ($result) {
                 $params["errCode"] = "success";
@@ -106,12 +107,12 @@ class Api_RedPacket_SendController extends MiniRedController
             }
 
             //last，create each amount for user
-            $eachAmount = [];
+            $amountArray = $this->generateRedData($sendAmount, $quantity);
             for ($i = 0; $i < $quantity; $i++) {
                 $grabberData = [
                     "packetId" => $packetId,
                     "number" => $i,
-                    "amount" => 10.01 + $i,
+                    "amount" => $amountArray[$i],
                 ];
                 $result = $this->ctx->DuckChatRedPacketGrabberDao->insertGrabbers($grabberData);
                 if (!$result) {

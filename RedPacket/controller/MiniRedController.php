@@ -24,14 +24,12 @@ abstract class MiniRedController extends MiniProgramController
      */
     protected function requestException($ex)
     {
-        error_log("===============" . $ex);
         echo $ex->getMessage() . "->" . $ex->getTraceAsString();
     }
 
     protected function getUserAccount($userId)
     {
         $account = $this->ctx->DuckChatUserAccountDao->queryUserAccount($userId);
-        error_log("===============user Account=" . var_export($account, true));
         return $account;
     }
 
@@ -84,6 +82,43 @@ abstract class MiniRedController extends MiniProgramController
     protected function getRedPacketGrabbersCount($packetId)
     {
         return $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbersCount($packetId, RedPacketStatus::grabbedStatus);
+    }
+
+    protected function generateRedData($amount, $number)
+    {
+        $defaultValue = 0.01;
+        //每个人默认0.01
+        $arr_num = [];
+
+        $leftAmount = $amount - $defaultValue * $number;
+
+        for ($i = 0; $i < $number; $i++) {
+            $tempValue = $this->randomAmount($leftAmount, $number - $i);
+            $arr_num[$i] = $tempValue + $defaultValue;
+            $leftAmount = $leftAmount - $tempValue;
+        }
+
+        $totalSum = array_sum($arr_num);
+        error_log("send amount=" . $amount . " number=" . $number . " array sum=" . $totalSum);
+
+        if ($totalSum == $amount) {
+            return $arr_num;
+        } else {
+            error_log("error=====send equal=" . ($totalSum === $amount));
+            throw new Exception("红包金额不匹配，请重试");
+        }
+    }
+
+    function randomAmount($amount, $count)
+    {
+        if ($count == 1) {
+            return $amount;
+        }
+        if ($amount > 0) {
+            $result = random_int(1, $amount * 100 / $count) / 100;
+            return $result;
+        }
+        return 0;
     }
 
 }

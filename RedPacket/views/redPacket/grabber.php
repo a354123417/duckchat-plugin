@@ -3,7 +3,7 @@
 <head>
     <title>红包</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../public/css/grabber.css"/>
+    <link rel="stylesheet" href="../../public/css/grabber.css?v=0.1"/>
 </head>
 <style>
 </style>
@@ -37,8 +37,17 @@
                     </div>
                     <div class="item-body">
                         <div class="item-body-display">
-                            <div class="item-body-desc"><?php echo $grabber['nickname']; ?></div>
-                            <div class="item-body-tail"><?php echo $grabber['amount']; ?>元</div>
+                            <div class="item-body-desc">
+                                <div class="grab-user"><?php echo $grabber['nickname']; ?></div>
+                                <div class="grab-time"><?php echo date("H:i", $grabber['grabTime'] / 1000); ?></div>
+                            </div>
+                            <div class="item-body-tail">
+                                <div class="grab-amount"><?php echo $grabber['amount']; ?>元</div>
+
+                                <?php if (true) { ?>
+                                    <div class="grab-top">手气最佳</div>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,31 +60,11 @@
     </div>
 </div>
 
-<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="../../public/manage/native.js"></script>
+<!--<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>-->
+<!--<script type="text/javascript" src="../../public/manage/native.js"></script>-->
+<!---->
+<!--<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>-->
 
-<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>
-
-<script type="text/javascript">
-
-    function grabRedPacket() {
-        var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.grab";
-
-        var data = {
-            "packetId": "10001",
-        };
-
-        alert("url=" + url);
-        zalyjsCommonAjaxPostJson(url, data, grabResponse)
-    }
-
-    function grabResponse(url, data, result) {
-        alert("result=" + result);
-        var url = "http://192.168.3.4:8088/index.php?action=page.grab&type=grabber";
-        zalyjsOpenPage(url);
-    }
-
-</script>
 
 </body>
 
