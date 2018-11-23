@@ -112,9 +112,7 @@
 
     function handleConfirmOperationResponse() {
         window.location.reload();
-
     }
-
 
 </script>
 
