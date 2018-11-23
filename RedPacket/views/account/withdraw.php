@@ -17,6 +17,9 @@
             </div>
             <div class="line">
             </div>
+            <div class="withdraw_tip">
+                当前全部余额￥<span class="all_money">2220</span>，<span class="withdraw_all">全部提现</span>
+            </div>
             <button class="confirm_operation submit_disable">提现</button>
         </div>
 
@@ -27,14 +30,7 @@
 <script type="text/javascript">
 
     $(".withdraw_money").on("input porpertychange", function () {
-        var valueMoney = $(".withdraw_money").val();
-        if(valueMoney != undefined && valueMoney.length>0) {
-            $(".confirm_operation").removeClass("submit_disable");
-            $(".confirm_operation").addClass("submit");
-            return;r
-        }
-        $(".confirm_operation").addClass("submit_disable");
-        $(".confirm_operation").removeClass("submit");
+        checkOperstaionButtonStatus();
     });
 
     $(".confirm_operation").on("click", function () {
@@ -42,6 +38,23 @@
         //TODO post withdraw
     });
 
+
+    $(".withdraw_all").on("click", function () {
+        var allMoney = $(".all_money").html();
+        $(".withdraw_money").val(allMoney);
+        checkOperstaionButtonStatus();
+    });
+
+    function checkOperstaionButtonStatus() {
+        var valueMoney = $(".withdraw_money").val();
+        if(valueMoney != undefined && valueMoney.length>0) {
+            $(".confirm_operation").removeClass("submit_disable");
+            $(".confirm_operation").addClass("submit");
+            return;
+        }
+        $(".confirm_operation").addClass("submit_disable");
+        $(".confirm_operation").removeClass("submit");
+    }
 </script>
 </body>
 </html>

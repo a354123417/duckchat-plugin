@@ -105,3 +105,15 @@ input {
     margin-top: 30px;
 
 }
+
+.withdraw_tip{
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(27,27,27,1);
+    margin: 5px;
+}
+.withdraw_all {
+    color: #6478A5;
+    cursor: pointer;
+}
