@@ -56,9 +56,9 @@ class Api_RedPacket_SendController extends MiniRedController
         return;
     }
 
-    private function getUserAccount($userId)
+    protected function getUserAccount($userId)
     {
-        $account = $this->ctx->DuckChatUserAccountDao->queryUserAccount($userId);
+        $account = parent::getUserAccount($userId);
 
         if ($account) {
             return $account;
@@ -163,7 +163,7 @@ class Api_RedPacket_SendController extends MiniRedController
                         </body>
                         </html>';
         $webCode = str_replace(PHP_EOL, "", $webCode);
-        $gotoUrl = "http://192.168.3.4:8088/index.php?action=page.grab?packetId=" . $packetId;
+        $gotoUrl = "http://192.168.3.4:8088/index.php?action=page.grab&packetId=" . $packetId;
         $this->dcApi->sendWebMessage($isGroup, $fromUserId, $toId, $title, $webCode, $width, $height, $gotoUrl);
     }
 }

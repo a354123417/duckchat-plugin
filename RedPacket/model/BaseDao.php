@@ -26,10 +26,12 @@ abstract class BaseDao
 
     abstract function __init();
 
-    protected function saveData($tableName, $data, $defaultColumns)
+    protected function saveData($tableName, $data, $defaultColumns, $tag = false)
     {
-        $startTime = microtime(true);
-        $tag = __CLASS__ . "-" . __FUNCTION__;
+        if (!$tag) {
+            $tag = __CLASS__ . "-" . __FUNCTION__;
+        }
+        $startTime = $this->getCurrentTimeMills();
         $insertKeys = array_keys($data);
         $insertKeyStr = implode(",", $insertKeys);
         $placeholderStr = "";
@@ -70,10 +72,12 @@ abstract class BaseDao
         return false;
     }
 
-    protected function updateData($tableName, $where, $data, $defaultColumns)
+    protected function updateData($tableName, $where, $data, $defaultColumns, $tag = false)
     {
-        $tag = __CLASS__ . "-" . __FUNCTION__;
-        $startTime = microtime(true);
+        if (!$tag) {
+            $tag = __CLASS__ . "-" . __FUNCTION__;
+        }
+        $startTime = $this->getCurrentTimeMills();
         $updateStr = "";
         $updateKeys = array_keys($data);
         foreach ($updateKeys as $updateField) {
@@ -98,17 +102,15 @@ abstract class BaseDao
         $whereKeyStr = trim($whereKeyStr, "and");
 
         if (!$whereKeyStr) {
-            throw new Exception("update is fail");
+            throw new Exception($tag . " update is fail");
         }
 
         $sql = "update  $tableName set  $updateStr where  $whereKeyStr";
 
-        $this->logger->writeSqlLog($tag, $sql, $data, $startTime);
-
         $prepare = $this->db->prepare($sql);
         $this->handlePrepareError($tag, $prepare);
         foreach ($data as $key => $val) {
-            if (!in_array($updateField, $defaultColumns)) {
+            if (!in_array($key, $defaultColumns)) {
                 continue;
             }
             $prepare->bindValue(":" . $key, $val);
@@ -117,14 +119,9 @@ abstract class BaseDao
         foreach ($where as $key => $val) {
             $prepare->bindValue(":$key", $val);
         }
-        $this->logger->writeSqlLog($tag, $sql, $data, $startTime);
         $flag = $prepare->execute();
-        $count = $prepare->rowCount();
-
-        if ($flag && $count > 0) {
-            return true;
-        }
-        return false;
+        $this->logger->writeSqlLog($tag, $sql, ["data" => $data, "where" => $where, "result" => $flag], $startTime);
+        return $this->handlerUpdateResult($flag, $prepare, $tag);
     }
 
     public function handlePrepareError($tag, $prepare)
@@ -142,7 +139,54 @@ abstract class BaseDao
 
     protected function getCurrentTimeMills()
     {
-        return $this->ctx->ZalyHelper->getMsectime();
+        return ZalyHelper::getCurrentTimeMillis();
+    }
+
+    protected function getTimeHMS()
+    {
+        return date("y_m_d_h_i_s", time());
+    }
+
+    /**
+     * 处理 增，删 情况
+     * @param $tag
+     * @param $prepare
+     * @param $result
+     * @return bool
+     * @throws Exception
+     */
+    protected function handlerResult($result, $prepare, $tag)
+    {
+        if ($prepare) {
+            if ($result && $prepare->errorCode() == '00000') {
+                return true;
+            } elseif ($prepare->errorCode() == 'HY000') {
+                $this->logger->error($tag, "table not exists =" . var_export($prepare->errorInfo(), true));
+            }
+
+            throw new Exception($tag . " execute prepare error="
+                . var_export($prepare->errorInfo(), true));
+        }
+
+        throw new Exception($tag . " execute prepare fail as prepare false");
+    }
+
+    /**
+     * 单独处理 update 情况，必须rowCount>0 才算成功
+     * @param $result
+     * @param $prepare
+     * @param $tag
+     * @return bool
+     * @throws Exception
+     */
+    protected function handlerUpdateResult($result, $prepare, $tag)
+    {
+        $result = $this->handlerResult($result, $prepare, $tag);
+
+        if ($result) {
+            return $prepare->rowCount() > 0;
+        }
+        return false;
     }
 
 }

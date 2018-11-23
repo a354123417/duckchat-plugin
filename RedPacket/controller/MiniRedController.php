@@ -28,6 +28,13 @@ abstract class MiniRedController extends MiniProgramController
         echo $ex->getMessage() . "->" . $ex->getTraceAsString();
     }
 
+    protected function getUserAccount($userId)
+    {
+        $account = $this->ctx->DuckChatUserAccountDao->queryUserAccount($userId);
+        error_log("===============user Account=" . var_export($account, true));
+        return $account;
+    }
+
 
     protected function getRedPacketInfo($packetId)
     {

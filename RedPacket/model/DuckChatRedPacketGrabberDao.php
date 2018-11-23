@@ -40,9 +40,14 @@ class DuckChatRedPacketGrabberDao extends BaseDao
 
     public function lockRedPacket($id)
     {
-        $sql = "select * from $this->table where id=$id for update;";
+        $sql = "select status from $this->table where id=$id for update nowait;";
 
-        return $this->ctx->db->exec($sql);
+        $prepare = $this->db->prepare($sql);
+
+        $prepare->execute();
+
+        $status = $prepare->fetch(PDO::FETCH_COLUMN);
+        return $status;
     }
 
     public function queryRedPacketGrabbers($packetId, $userId = false, $number = false, $status = false, $limit = false)
@@ -52,15 +57,15 @@ class DuckChatRedPacketGrabberDao extends BaseDao
         $sql = "select $this->queryColumns from $this->table where packetId=:packetId ";
 
         if ($userId) {
-            $sql .= "and userId=:userId";
+            $sql .= " and userId=:userId";
         }
 
         if ($number !== false) {
-            $sql .= "and number=:number";
+            $sql .= " and number=:number";
         }
 
         if ($status !== false) {
-            $sql .= "and status=:status";
+            $sql .= " and status=:status";
         }
 
         if ($limit !== false) {
@@ -75,14 +80,15 @@ class DuckChatRedPacketGrabberDao extends BaseDao
                 $prepare->bindValue(":userId", $userId);
             }
             if ($number !== false) {
-                $prepare->bindValue(":number", $number);
+                $prepare->bindValue(":number", $number, PDO::PARAM_INT);
             }
 
             if ($status !== false) {
-                $prepare->bindValue(":status", $status);
+                $prepare->bindValue(":status", $status, PDO::PARAM_INT);
             }
 
             $flag = $prepare->execute();
+
             $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
             if ($flag && $result) {
                 return $result;
