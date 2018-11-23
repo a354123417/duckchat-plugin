@@ -28,6 +28,7 @@ class DuckChatUserAccountDao extends BaseDao
     public function addUserAccount($data)
     {
         $data["createTime"] = ZalyHelper::getCurrentTimeMillis();
+        $data["status"] = 1;
         return $this->saveData($this->table, $data, $this->columns);
     }
 

@@ -148,8 +148,12 @@ class Api_RedPacket_GrabController extends MiniRedController
                 $result = $this->ctx->DuckChatUserAccountDao->addUserAccount($data);
             } else {
                 //update
-                $data = [];
-                $where = [];
+                $data = [
+                    "amount" => $grabbedAmount + $userAccount['amount'],
+                ];
+                $where = [
+                    "userId" => $userId,
+                ];
                 $result = $this->ctx->DuckChatUserAccountDao->updateUserAccount($data, $where);
             }
 
