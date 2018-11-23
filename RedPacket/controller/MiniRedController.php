@@ -45,12 +45,40 @@ abstract class MiniRedController extends MiniProgramController
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
-            return $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId,
+            $grabbers = $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId,
                 false, false, RedPacketStatus::grabbedStatus);
+
+            return $grabbers;
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
         }
         return [];
+    }
+
+    protected function getRedPacketGrabbersWithProfile($packetId)
+    {
+        $grabbers = $this->getRedPacketGrabbers($packetId);
+
+        $grabbersProfile = [];
+        if ($grabbers) {
+            foreach ($grabbers as $grabber) {
+
+                $userId = $grabber["userId"];
+                $userProfile = $this->dcApi->getUserProfile($userId);
+
+                $userProfile = json_decode($userProfile, true);
+                $userNickname = $userProfile["body"]["profile"]["public"]["nickname"];
+                $userAvatar = $userProfile["body"]["profile"]["public"]["avatar"];
+
+                $grabber["nickname"] = $userNickname;
+                $grabber["avatar"] = $this->siteAddress . "/_api_file_download_/?fileId=" . $userAvatar;
+
+                $grabbersProfile[] = $grabber;
+            }
+
+        }
+
+        return $grabbersProfile;
     }
 
     protected function getRedPacketGrabbersCount($packetId)

@@ -31,9 +31,14 @@ class Page_GrabController extends MiniRedController
         $redPacketDesc = $redPacketInfo["description"];
         $sendUserId = $redPacketInfo["userId"];
 
+        $grabbersCount = $this->getRedPacketGrabbersCount($packetId);
+        $isGrabbedOver = $grabbersCount >= $redPacketQuantity;
+
         $sendUserProfile = $this->dcApi->getUserProfile($sendUserId);
 
-        $sendUserNickname = '';
+        $sendUserProfile = json_decode($sendUserProfile, true);
+        $sendUserNickname = $sendUserProfile["body"]["profile"]["public"]["nickname"];
+        $sendUserAvatar = $sendUserProfile["body"]["profile"]["public"]["avatar"];
 
         $isGrabber = $this->isPacketGrabber($packetId, $this->userId);
 
@@ -41,16 +46,31 @@ class Page_GrabController extends MiniRedController
             'packetId' => $packetId,
             'redPacketQuantity' => $redPacketQuantity,
             'sendUserNickname' => $sendUserNickname,
-            'redPacketAmount' => $redPacketAmount,
-            'redPacketDesc' => $redPacketDesc,
+            'sendUserAvatar' => $this->siteAddress . "/_api_file_download_/?fileId=" . $sendUserAvatar,
+            'redPacketAmount' => $redPacketAmount . "元",
+            'redPacketDesc' => !empty($redPacketDesc) ? $redPacketDesc : "恭喜发财，万事如意",
         ];
 
         if ($isGrabber) {
             //get grabbers
-            $grabbers = $this->getRedPacketGrabbers($packetId);
+            $grabbers = $this->getRedPacketGrabbersWithProfile($packetId);
             $params['redPacketGrabbers'] = $grabbers;
+
+            if ($isGrabbedOver) {
+                $costTimeSec = ($redPacketFinishTime - $redPacketSendTime) / 1000;
+                $overTip = $redPacketQuantity . "个红包，" . $costTimeSec . "秒被抢光";
+                $params['redPacketTip'] = $overTip;
+            } else {
+                $overTip = $redPacketQuantity . "个红包，已被抢了" . $grabbersCount . "个";
+                $params['redPacketTip'] = $overTip;
+            }
             echo $this->display("redPacket_grabber", $params);
         } else {
+
+            if ($isGrabbedOver) {
+                $params['redPacketDesc'] = "手慢了，红包派完了";
+            }
+            $params["isGrabbedOver"] = $isGrabbedOver;
             echo $this->display("redPacket_grab", $params);
         }
 

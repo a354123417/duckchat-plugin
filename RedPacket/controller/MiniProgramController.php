@@ -28,7 +28,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     private $miniProgramId = 200;
     private $miniProgramSecretKey = "Q968Pix85z2wLRDqZ4C89Bgg0mb5Apvz";   //小程序的密钥
-    private $siteAddress = "http://192.168.3.4:8888";
+    protected $siteAddress = "http://192.168.3.4:8888";
 
     /**
      * @var

@@ -10,18 +10,17 @@
 
 <body>
 <div class="wrapper">
-    <div><img class="user-avatar" src="http://www.jituwang.com/uploads/allimg/151003/258203-1510030RP894.jpg"></div>
+    <div><img class="user-avatar" src="<?php echo $sendUserAvatar; ?>"></div>
     <div class="red-center">
-        <div class="send-user">运营部-李萌</div>
+        <div class="send-user"><?php echo $sendUserNickname; ?></div>
     </div>
     <div class="red-center">
         <div class="red-random">发了一个红包,金额随机</div>
     </div>
     <div class="red-center">
-        <div class="red-desc">恭喜发财，万事如意</div>
+        <div class="red-desc"><?php echo $redPacketDesc; ?></div>
     </div>
     <div class="red-center">
-        <!--        <div class="red-open-buttom" id="grab-red">開</div>-->
         <button class="red-open-buttom" onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
     </div>
 </div>
@@ -36,20 +35,26 @@
     function grabRedPacket(packetId) {
         var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.grab";
 
-        alert("packetId=" + packetId);
-
         var data = {
             "packetId": packetId,
         };
 
-        alert("url=" + url);
         zalyjsCommonAjaxPostJson(url, data, grabResponse);
     }
 
     function grabResponse(url, data, result) {
-        alert("result=" + result);
-        var url = "http://192.168.3.4:8088/index.php?action=page.grab&type=grabber";
-        zalyjsOpenPage(url);
+        if (result) {
+
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                alert("抢红包失败，原因：" + res.errInfo);
+            }
+
+        } else {
+            alert("抢红包失败，请重新操作");
+        }
+        location.reload();
     }
 
 </script>

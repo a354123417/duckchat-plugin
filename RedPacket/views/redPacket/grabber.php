@@ -10,61 +10,41 @@
 
 <body>
 <div class="wrapper">
-    <div><img class="user-avatar" src="http://www.jituwang.com/uploads/allimg/151003/258203-1510030RP894.jpg"></div>
+    <div><img class="user-avatar" src="<?php echo $sendUserAvatar; ?>"></div>
     <div class="red-center">
-        <div class="send-user">运营部-李萌</div>
+        <div class="send-user"><?php echo $sendUserNickname; ?></div>
     </div>
     <div class="red-center">
-        <div class="red-desc">恭喜发财，万事如意</div>
+        <div class="red-desc"><?php echo $redPacketDesc; ?></div>
     </div>
     <div class="red-center">
-        <div class="red-amount">1.12 元</div>
+        <div class="red-amount"><?php echo $redPacketAmount; ?></div>
     </div>
 
     <div class="layout-all-row">
 
         <div class="list-item-center">
             <div class="item-title">
-                <div class="item-title-content">
-                    8个红包，50秒被抢光
-                </div>
+                <div class="item-title-content"><?php echo $redPacketTip; ?></div>
             </div>
             <div class="division-line"></div>
 
-            <div class="item-row">
-                <div class="item-header">
-                    <img class="grabber-avatar"
-                         src="http://www.jituwang.com/uploads/allimg/151003/258203-1510030RP894.jpg"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">我的朋友们</div>
 
-                        <div class="item-body-tail">
-                            2.12元
+            <?php foreach ($redPacketGrabbers as $grabber) { ?>
+                <div class="item-row">
+                    <div class="item-header">
+                        <img class="grabber-avatar" src="<?php echo $grabber['avatar']; ?>"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc"><?php echo $grabber['nickname']; ?></div>
+                            <div class="item-body-tail"><?php echo $grabber['amount']; ?>元</div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="division-line"></div>
+                <div class="division-line"></div>
 
-            <div class="item-row">
-                <div class="item-header">
-                    <img class="grabber-avatar"
-                         src="http://www.jituwang.com/uploads/allimg/151003/258203-1510030RP894.jpg"/>
-                </div>
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">我的朋友们</div>
-
-                        <div class="item-body-tail">
-                            2.12元
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="division-line"></div>
-
+            <?php } ?>
 
         </div>
 

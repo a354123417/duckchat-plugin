@@ -56,7 +56,7 @@ class Api_RedPacket_GrabController extends MiniRedController
     //grab red packet
     private function grabRedPacket($packetId, $userId, $quantity)
     {
-        //遍历循环，获取没有被抢走的
+        //遍历循环，随机获取没有被抢走的
         $grabbingPackets = $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId,
             false, false, RedPacketStatus::grabbingStatus);
 
@@ -95,7 +95,6 @@ class Api_RedPacket_GrabController extends MiniRedController
         $id = $randomRedPacket["id"];
         $grabbedAmount = $randomRedPacket["amount"];
 
-        error_log("=============grab red packet packetId=" . $packetId . " id=" . $id);
         try {
             $this->ctx->db->beginTransaction();
 
@@ -108,19 +107,6 @@ class Api_RedPacket_GrabController extends MiniRedController
                 $this->logger->error("==============", "红包已经被抢1,LOCK失败packetId=" . $packetId . " id=" . $id);
                 return false;
             }
-
-//            $data = [
-//                "status" => RedPacketStatus::grabbedStatus,
-//            ];
-//            $where = [
-//                "packetId" => $packetId,
-//            ];
-//
-//            $result = $this->ctx->DuckChatRedPacketGrabberDao->updateRedPacket($data, $where);
-//
-//            if (!$result) {
-//                throw new Exception("红包已经被抢2 packetId=" . $packetId . " id=" . $id);
-//            }
 
             $data2 = [
                 "userId" => $userId,
@@ -137,32 +123,36 @@ class Api_RedPacket_GrabController extends MiniRedController
                 throw new Exception("更新我的红包状态失败");
             }
 
-            //inc my amount
-            $userAccount = $this->getUserAccount($userId);
-            if (!$userAccount) {
-                //insert
-                $data = [
-                    "userId" => $userId,
-                    "amount" => $grabbedAmount,
-                ];
-                $result = $this->ctx->DuckChatUserAccountDao->addUserAccount($data);
+            if (is_numeric($grabbedAmount) && $grabbedAmount > 0) {
+
+                //inc my amount
+                $userAccount = $this->getUserAccount($userId);
+                if (!$userAccount) {
+                    //insert
+                    $data = [
+                        "userId" => $userId,
+                        "amount" => $grabbedAmount,
+                    ];
+                    $result = $this->ctx->DuckChatUserAccountDao->addUserAccount($data);
+                } else {
+                    //update
+                    $data = [
+                        "amount" => $grabbedAmount + $userAccount['amount'],
+                    ];
+                    $where = [
+                        "userId" => $userId,
+                    ];
+                    $result = $this->ctx->DuckChatUserAccountDao->updateUserAccount($data, $where);
+                }
+
+                if (!$result) {
+                    throw new Exception("更新我的我的账户失败");
+                }
             } else {
-                //update
-                $data = [
-                    "amount" => $grabbedAmount + $userAccount['amount'],
-                ];
-                $where = [
-                    "userId" => $userId,
-                ];
-                $result = $this->ctx->DuckChatUserAccountDao->updateUserAccount($data, $where);
+                $result = false;
             }
-
-            if (!$result) {
-                throw new Exception("更新我的我的账户失败");
-            }
-
             $this->ctx->db->commit();
-            return true;
+            return $result;
         } catch (Throwable $e) {
             $this->ctx->db->rollBack();
             $this->logger->error($tag, $e);
