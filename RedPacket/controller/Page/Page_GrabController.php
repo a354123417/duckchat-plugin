@@ -67,7 +67,8 @@ class Page_GrabController extends MiniRedController
 
     private function isPacketGrabber($packetId, $userId)
     {
-        $grabber = $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId, $userId);
+        $grabber = $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId,
+            $userId, false, RedPacketStatus::grabbedStatus);
 
         if ($grabber && count($grabber) > 0) {
             return true;

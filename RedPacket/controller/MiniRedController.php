@@ -38,10 +38,17 @@ abstract class MiniRedController extends MiniProgramController
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         try {
-            return $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId);
+            return $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbers($packetId,
+                false, false, RedPacketStatus::grabbedStatus);
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
         }
         return [];
     }
+
+    protected function getRedPacketGrabbersCount($packetId)
+    {
+        return $this->ctx->DuckChatRedPacketGrabberDao->queryRedPacketGrabbersCount($packetId, RedPacketStatus::grabbedStatus);
+    }
+
 }

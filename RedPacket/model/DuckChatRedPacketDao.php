@@ -44,6 +44,18 @@ class DuckChatRedPacketDao extends BaseDao
         return $this->updateData($this->table, $where, $data, $this->columns);
     }
 
+    public function updateRedPacketFinish($packetId, $finishTime)
+    {
+        $data = [
+            "finishTime" => $finishTime,
+        ];
+        $where = [
+            "packetId" => $packetId,
+        ];
+
+        return $this->updateRedPacket($data, $where);
+    }
+
     public function queryRedPacket($packetId)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
