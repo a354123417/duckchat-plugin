@@ -31,7 +31,7 @@
         if(valueMoney != undefined && valueMoney.length>0) {
             $(".confirm_operation").removeClass("submit_disable");
             $(".confirm_operation").addClass("submit");
-            return;
+            return;r
         }
         $(".confirm_operation").addClass("submit_disable");
         $(".confirm_operation").removeClass("submit");
