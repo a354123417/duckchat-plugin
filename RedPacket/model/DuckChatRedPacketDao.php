@@ -6,9 +6,9 @@
  * Time: 8:00 PM
  */
 
-class DuckChatRedPacketDao extends BaseCtx
+class DuckChatRedPacketDao extends BaseDao
 {
-    private $table = "DuckChatRedPacketRecords";
+    private $table = "DuckChatRedPacket";
 
     private $columns = [
         "id",
@@ -25,9 +25,8 @@ class DuckChatRedPacketDao extends BaseCtx
 
     private $queryColumns;
 
-    public function __construct()
+    public function __init()
     {
-        parent::__construct();
         $this->queryColumns = implode(",", $this->columns);
     }
 

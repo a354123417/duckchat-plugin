@@ -30,7 +30,7 @@ class Api_RedPacket_GrabController extends MiniRedController
         $redPacketInfo = $this->getRedPacketInfo($packetId);
 
         if (!$redPacketInfo) {
-            throw new  Exception("红包已经失效");
+            throw new Exception("红包已经失效");
         }
 
         $totalAmount = $redPacketInfo['totalAmount'];

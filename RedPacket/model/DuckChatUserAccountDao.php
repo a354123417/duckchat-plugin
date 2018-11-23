@@ -6,7 +6,7 @@
  * Time: 8:00 PM
  */
 
-class DuckChatUserAccountDao extends BaseCtx
+class DuckChatUserAccountDao extends BaseDao
 {
     private $table = "DuckChatUserAccount";
 
@@ -18,15 +18,14 @@ class DuckChatUserAccountDao extends BaseCtx
 
     private $queryColumns;
 
-    public function __construct()
+    public function __init()
     {
-        parent::__construct();
         $this->queryColumns = implode(",", $this->columns);
     }
 
     public function addUserAccount($data)
     {
-        return parent::saveData($this->table, $data, $this->columns);
+        return $this->saveData($this->table, $data, $this->columns);
     }
 
     public function saveOrUpdateSite($data, $where)
@@ -37,43 +36,43 @@ class DuckChatUserAccountDao extends BaseCtx
         try {
             $result = $this->saveData($this->table, $where, $data, $this->columns);
         } catch (Exception $e) {
-            $this->Wpf_Logger->error($tag, $e);
+            $this->logger->error($tag, $e);
         }
 
         if (!$result) {
-            return $this->updateSite($where, $data);
+            return $this->updateUserAccount($where, $data);
         }
 
         return $result;
 
     }
 
-    public function updateSite($data, $where)
+    public function updateUserAccount($data, $where)
     {
-        return parent::updateData($this->table, $where, $data, $this->columns);
+        return $this->updateData($this->table, $where, $data, $this->columns);
     }
 
-    public function querySite($siteId)
+    public function queryUserAccount($userId)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $startTime = $this->getCurrentTimeMills();
-        $sql = "select $this->queryColumns from $this->table where siteId=:siteId;";
+        $sql = "select $this->queryColumns from $this->table where userId=:userId;";
 
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
-            $prepare->bindValue(":siteId", $siteId);
+            $prepare->bindValue(":userId", $userId);
             $flag = $prepare->execute();
             $result = $prepare->fetch(\PDO::FETCH_ASSOC);
             if ($flag && $result) {
                 return $result;
             }
         } catch (Exception $e) {
-            $this->Wpf_Logger->error($tag, $e);
+            $this->logger->error($tag, $e);
         } finally {
-            $this->Wpf_Logger->writeSqlLog($tag, $sql, $siteId, $this->getCurrentTimeMills() - $startTime);
+            $this->logger->writeSqlLog($tag, $sql, $userId, $this->getCurrentTimeMills() - $startTime);
         }
-        return null;
+        return false;
     }
 
 }

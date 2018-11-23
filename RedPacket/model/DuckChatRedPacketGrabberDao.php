@@ -6,29 +6,31 @@
  * Time: 8:00 PM
  */
 
-class DuckChatRedPacketGrabberDao extends BaseCtx
+class DuckChatRedPacketGrabberDao extends BaseDao
 {
-    private $table = "DuckChatRedPacketRecords";
+    private $table = "DuckChatRedPacketGrabbers";
 
     private $columns = [
         "id",
         "packetId",
         "userId",
         "amount",
+        "number",
+        "status", //0 未被抢 1 抢夺
         "grabTime",
     ];
 
     private $queryColumns;
 
-    public function __construct()
+    public function __init()
     {
-        parent::__construct();
         $this->queryColumns = implode(",", $this->columns);
     }
 
     public function insertGrabbers($data)
     {
         $data['grabTime'] = ZalyHelper::getCurrentTimeMillis();
+        $data['status'] = 0;
         return $this->saveData($this->table, $data, $this->columns);
     }
 

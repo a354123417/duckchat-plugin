@@ -35,10 +35,10 @@ abstract class MiniProgramController extends \Wpf_Controller
      */
     protected $dcApi;
 
-    public function __construct(Wpf_Ctx $context)
+    public function __construct(BaseCtx $context)
     {
-        $this->ctx = new BaseCtx();
-        $this->logger = new Wpf_Logger();
+        $this->ctx = $context;
+        $this->logger = $context->getLogger();
         $this->dcApi = new DC_Open_Api($this->siteAddress,
             $this->miniProgramId,
             $this->miniProgramSecretKey);

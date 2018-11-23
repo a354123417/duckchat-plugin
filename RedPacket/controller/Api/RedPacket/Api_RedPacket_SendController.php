@@ -13,7 +13,8 @@ class Api_RedPacket_SendController extends MiniRedController
      */
     protected function doGet()
     {
-
+        //不支持get
+        return false;
     }
 
     /**
@@ -25,43 +26,106 @@ class Api_RedPacket_SendController extends MiniRedController
             "errCode" => "error",
         ];
 
-        $userId = $this->userId;
-        $total = trim($_POST['total']);
-        $quality = trim($_POST['quality']);
-        $description = trim($_POST['description']);
 
-        $requestParams = $this->getRequestParams();
-        $isGroup = $requestParams['isGroup'];
-        $roomId = $requestParams['roomId'];
-
-
-        $packetId = ZalyHelper::generateRandomKey(16);
-
-        $result = $this->sendRedPacket($packetId, $userId, $total, $quality, $description, $isGroup, $roomId);
-
-        if ($result) {
-            $params["errCode"] = "success";
-            $this->proxyRedPacketMessage($packetId, $isGroup, $roomId);
+        try {
+            $userId = $this->userId;
+            $sendAmount = trim($_POST['total']);
+            $quality = trim($_POST['quality']);
+            $description = trim($_POST['description']);
+            $requestParams = $this->getRequestParams();
+            $isGroup = $requestParams['isGroup'];
+            $roomId = $requestParams['roomId'];
+            $sendUserAccount = $this->getUserAccount($userId);
+            $userAmount = $sendUserAccount["amount"];
+            error_log("=============sendUserAccount amount =" . $userAmount);
+            if ($sendAmount > $userAmount) {
+                throw new Exception("账户余额不足，请联系站长充值");
+            }
+            $packetId = ZalyHelper::generateRandomKey(16);
+            $result = $this->sendRedPacket($packetId, $userId, $userAmount, $sendAmount, $quality, $description, $isGroup, $roomId);
+            if ($result) {
+                $params["errCode"] = "success";
+                $this->proxyRedPacketMessage($packetId, $isGroup, $roomId);
+            }
+        } catch (Exception $e) {
+            $params["errInfo"] = $e->getMessage();
+            $this->logger->error($this->action, $e);
         }
 
         echo json_encode($params);
         return;
     }
 
-
-    private function sendRedPacket($packetId, $userId, $totalAmount, $quantity, $description, $isGroup, $roomId)
+    private function getUserAccount($userId)
     {
-        $data = [
-            "packetId" => $packetId,
-            "userId" => $userId,
-            "totalAmount" => $totalAmount,
-            "quantity" => $quantity,
-            "description" => $description,
-            "isGroup" => $isGroup,
-            "roomId" => $roomId,
-        ];
+        $account = $this->ctx->DuckChatUserAccountDao->queryUserAccount($userId);
 
-        return $this->ctx->DuckChatRedPacketDao->insertRedPacket($data);
+        if ($account) {
+            return $account;
+        }
+
+        throw new Exception("用户账户金额为空");
+    }
+
+    private function sendRedPacket($packetId, $userId, $userAmount, $sendAmount, $quantity, $description, $isGroup, $roomId)
+    {
+        $result = false;
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        //开启事务
+        $this->ctx->db->beginTransaction();
+
+        try {
+            //firstly，reduce user account
+            $account_data = [
+                "amount" => $userAmount - $sendAmount,
+            ];
+            $account_where = [
+                "userId" => $userId,
+            ];
+
+            $result = $this->ctx->DuckChatUserAccountDao->updateUserAccount($account_data, $account_where);
+
+            if (!$result) {
+                throw new Exception("扣除用户账户失败");
+            }
+
+            //secondly，add redPacket
+            $redPacket_data = [
+                "packetId" => $packetId,
+                "userId" => $userId,
+                "totalAmount" => $sendAmount,
+                "quantity" => $quantity,
+                "description" => $description,
+                "isGroup" => $isGroup,
+                "roomId" => $roomId,
+            ];
+            $result = $this->ctx->DuckChatRedPacketDao->insertRedPacket($redPacket_data);
+
+            if (!$result) {
+                throw new Exception("生成红包失败");
+            }
+
+            //last，create each amount for user
+            $eachAmount = [];
+            for ($i = 0; $i < $quantity; $i++) {
+                $grabberData = [
+                    "packetId" => $packetId,
+                    "number" => $i,
+                    "amount" => 10.01 + $i,
+                ];
+                $result = $this->ctx->DuckChatRedPacketGrabberDao->insertGrabbers($grabberData);
+                if (!$result) {
+                    throw new Exception("生成红包随机金额失败");
+                }
+            }
+
+            $this->ctx->db->commit();
+        } catch (Exception $e) {
+            $this->ctx->db->rollBack();
+            $this->logger->error($tag, $e);
+        }
+
+        return $result;
     }
 
     private function proxyRedPacketMessage($packetId, $isGroup, $roomId)
