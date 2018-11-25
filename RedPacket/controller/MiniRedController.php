@@ -101,7 +101,9 @@ abstract class MiniRedController extends MiniProgramController
         $totalSum = array_sum($arr_num);
         error_log("send amount=" . $amount . " number=" . $number . " array sum=" . $totalSum);
 
-        if ($totalSum == $amount) {
+        $cost = $amount - $totalSum;
+
+        if ($cost == 0) {
             return $arr_num;
         } else {
             error_log("error=====send equal=" . ($totalSum === $amount));

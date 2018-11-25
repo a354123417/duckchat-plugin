@@ -178,7 +178,9 @@
 <script type="text/javascript">
 
     function sendRedPacket() {
-        var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.send";
+        // var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.send";
+
+        var url = "./index.php?action=api.redPacket.send";
 
         var data = {
             "total": 10,
@@ -189,8 +191,16 @@
     }
 
     function sendResponse(url, data, result) {
+        if (result) {
 
-        alert("result=" + result);
+            var res = JSON.parse(result);
+            if ("success" != res.errCode) {
+                alert(res.errInfo);
+                zalyjsClosePage();
+            }
+        } else {
+            alert("发送红包失败");
+        }
         zalyjsClosePage();
     }
 
