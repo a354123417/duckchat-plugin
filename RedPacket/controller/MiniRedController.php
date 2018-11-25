@@ -94,19 +94,20 @@ abstract class MiniRedController extends MiniProgramController
 
         for ($i = 0; $i < $number; $i++) {
             $tempValue = $this->randomAmount($leftAmount, $number - $i);
+
+            error_log("print=====each random amount =" . $tempValue);
+
             $arr_num[$i] = $tempValue + $defaultValue;
             $leftAmount = $leftAmount - $tempValue;
         }
 
         $totalSum = array_sum($arr_num);
-        error_log("send amount=" . $amount . " number=" . $number . " array sum=" . $totalSum);
 
-        $cost = $amount - $totalSum;
+        $cost = bcsub($amount, $totalSum, 2);
 
         if ($cost == 0) {
             return $arr_num;
         } else {
-            error_log("error=====send equal=" . ($totalSum === $amount));
             throw new Exception("红包金额不匹配，请重试");
         }
     }
@@ -118,7 +119,7 @@ abstract class MiniRedController extends MiniProgramController
         }
         if ($amount > 0) {
             $result = random_int(1, $amount * 100 / $count) / 100;
-            return $result;
+            return round($result, 2);
         }
         return 0;
     }

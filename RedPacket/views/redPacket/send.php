@@ -33,7 +33,7 @@
 
         .red_packet_input {
             width: 100%;
-            height: 56px;
+            height: 100%;
             background: rgba(255, 255, 255, 1);
             border-radius: 6px;
             border-width: 0;
@@ -56,6 +56,11 @@
             line-height: 48px;
             margin-top: 26px;
             margin-bottom: 26px;
+        }
+
+        .red_packet_real {
+            display: flex;
+            justify-content: center;
         }
 
         .red_packet_bg {
@@ -114,14 +119,14 @@
 
         <div class="list-item-center">
 
-            <div class="item-row red_packet_bg margin_title" id="site-name">
+            <div class="item-row red_packet_bg margin_title" id="red-packet-amount">
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc">总金额</div>
                         <div class="item-body-tail">
                             <div class="item-body-value">
                                 <input type="number" min=0.1 max=500.0 step="0.1" class="red_packet_input"
-                                       placeholder="0.00">
+                                       placeholder="0.00" id="rp-amount-input">
                             </div>
                             <div class="item-body-value-more">元</div>
                         </div>
@@ -130,13 +135,14 @@
             </div>
             <div class="red_packet_tip">拼手气红包</div>
 
-            <div class="item-row red_packet_bg margin_amount">
+            <div class="item-row red_packet_bg margin_amount" id="red-packet-quantity">
                 <div class="item-body">
                     <div class="item-body-display">
                         <div class="item-body-desc">红包个数</div>
                         <div class="item-body-tail">
                             <div class="item-body-value">
-                                <input type="number" min="1" max="100" class="red_packet_input" placeholder="数量">
+                                <input type="number" min="1" max="100" class="red_packet_input" placeholder="数量"
+                                       id="rp-quantity-input">
                             </div>
                             <div class="item-body-value-more">个</div>
                         </div>
@@ -149,13 +155,16 @@
 
             <div class="item-row margin_desc">
                 <div class="red_packet_textarea_parent">
-                    <textarea class="red_packet_textarea" placeholder="恭喜发财，万事如意"></textarea>
+                    <textarea class="red_packet_textarea" placeholder="恭喜发财，万事如意" id="rp-desc-input"></textarea>
                 </div>
             </div>
 
             <div class="item-row">
                 <div class="red_packet_amount">
-                    <div>¥ 100.00</div>
+                    <div class="red_packet_real" id="red-packet-realamount">
+                        <div>¥&nbsp;</div>
+                        <div>100.00</div>
+                    </div>
                 </div>
             </div>
 
@@ -177,15 +186,51 @@
 
 <script type="text/javascript">
 
+
+    function checkQuantity(value) {
+        var reg = new RegExp("^[0-9]+(.[0-9]{2})?$");
+        if (!reg.test(value)) {
+            alert("不符合!");
+            return false;
+        }
+    }
+
+
+    function checkQuantity(value) {
+        var reg = new RegExp("^[0-9]*$");
+        if (!reg.test(value)) {
+            return false;
+        }
+
+        if (value > 1000 || value <= 0) {
+            return false;
+        }
+    }
+
+    $("#red-packet-amount").bind("input propertychange", function (event) {
+        var amount = $("#rp-amount-input").val();
+
+
+    });
+
+
+    $("#red-packet-quantity").bind("input propertychange", function (event) {
+        var quantity = $("#rp-quantity-input").val();
+        checkQuantity(quantity);
+    });
+
+
     function sendRedPacket() {
-        // var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.send";
+        var totalAmount = $("#rp-amount-input").val();
+        var quantity = $("#rp-quantity-input").val();
+        var desc = $("#rp-desc-input").val();
 
         var url = "./index.php?action=api.redPacket.send";
 
         var data = {
-            "total": 10,
-            "quality": 10,
-            "description": "",
+            "total": totalAmount,
+            "quality": quantity,
+            "description": desc,
         };
         zalyjsCommonAjaxPostJson(url, data, sendResponse)
     }

@@ -3,7 +3,7 @@
 <head>
     <title>红包</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../public/css/grabber.css?v=0.1"/>
+    <link rel="stylesheet" href="../../public/css/grabber.css?v=0.2"/>
 </head>
 <style>
 </style>

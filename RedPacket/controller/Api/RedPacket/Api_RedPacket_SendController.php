@@ -123,7 +123,7 @@ class Api_RedPacket_SendController extends MiniRedController
             $this->ctx->db->commit();
         } catch (Exception $e) {
             $this->ctx->db->rollBack();
-            $this->logger->error($tag, $e);
+            throw $e;
         }
 
         return $result;
@@ -131,14 +131,19 @@ class Api_RedPacket_SendController extends MiniRedController
 
     private function proxyRedPacketMessage($packetId, $isGroup, $roomId)
     {
+        $scheme = $_SERVER['REQUEST_SCHEME'];
+        $serverHost = $_SERVER['HTTP_HOST'];
+
+        $serverAddress = $scheme . "://" . $serverHost;
+
         $fromUserId = $this->userId;
         $toId = $roomId;
 
         $title = "[红包]";
         $width = 230;
         $height = 84;
-        $cssAddress = "http://192.168.3.4:8088/public/manage/red.css?version=200";
-        $iconAddress = "http://192.168.3.4:8088/public/img/red-icon.png";
+        $cssAddress = $serverAddress . "/public/manage/red.css?version=200";
+        $iconAddress = $serverAddress . "/public/img/red-icon.png";
         $webCode = '<!DOCTYPE html>
                         <html>
                         <head>
@@ -164,7 +169,7 @@ class Api_RedPacket_SendController extends MiniRedController
                         </body>
                         </html>';
         $webCode = str_replace(PHP_EOL, "", $webCode);
-        $gotoUrl = "http://192.168.3.4:8088/index.php?action=page.grab&packetId=" . $packetId;
+        $gotoUrl = $serverAddress . "/index.php?action=page.grab&packetId=" . $packetId;
         $this->dcApi->sendWebMessage($isGroup, $fromUserId, $toId, $title, $webCode, $width, $height, $gotoUrl);
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <title>红包</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../public/css/grab.css"/>
+    <link rel="stylesheet" href="../../public/css/grab.css?v=2"/>
 </head>
 <style>
 </style>
@@ -21,7 +21,11 @@
         <div class="red-desc"><?php echo $redPacketDesc; ?></div>
     </div>
     <div class="red-center">
-        <button class="red-open-buttom" onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
+        <?php if ($isGrabbedOver) { ?>
+            <div class="red-grab-over" onclick="showDetails('<?php echo $packetId; ?>');">点击查看领取详情</div>
+        <?php } else { ?>
+            <button class="red-open-button" onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
+        <?php } ?>
     </div>
 </div>
 
@@ -33,7 +37,7 @@
 <script type="text/javascript">
 
     function grabRedPacket(packetId) {
-        var url = "http://192.168.3.4:8088/index.php?action=api.redPacket.grab";
+        var url = "./index.php?action=api.redPacket.grab";
 
         var data = {
             "packetId": packetId,
@@ -44,9 +48,7 @@
 
     function grabResponse(url, data, result) {
         if (result) {
-
             var res = JSON.parse(result);
-
             if ("success" != res.errCode) {
                 alert("抢红包失败，原因：" + res.errInfo);
             }
@@ -55,6 +57,12 @@
             alert("抢红包失败，请重新操作");
         }
         location.reload();
+    }
+
+
+    function showDetails(packetId) {
+        var url = "./index.php?action=page.grab&packetId=" + packetId+"&viewDetails=1;";
+        zalyjsOpenPage(url);
     }
 
 </script>

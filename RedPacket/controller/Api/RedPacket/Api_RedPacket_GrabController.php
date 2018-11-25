@@ -38,14 +38,14 @@ class Api_RedPacket_GrabController extends MiniRedController
                 $quantity = $redPacketInfo['quantity'];
                 $result = $this->grabRedPacket($packetId, $this->userId, $quantity);
                 if ($result) {
-                    $result['errCode'] = "success";
+                    $params['errCode'] = "success";
                 }
             } else {
                 //抢光了
-                $result['errCode'] = "success";
+                $params['errCode'] = "success";
             }
         } catch (Exception $e) {
-            $result['errInfo'] = $e->getMessage();
+            $params['errInfo'] = $e->getMessage();
             $this->logger->error($this->action, $e);
         }
 
@@ -86,6 +86,7 @@ class Api_RedPacket_GrabController extends MiniRedController
             unset($grabbingPackets[$randomKey]);
         }
 
+        return true;
     }
 
     private function calculateGrabbingRedPackets($packetId, $userId, $randomRedPacket, $currentTime)

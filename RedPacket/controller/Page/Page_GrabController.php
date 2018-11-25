@@ -16,10 +16,7 @@ class Page_GrabController extends MiniRedController
         $this->getRequestParams();
 
         $packetId = $_GET['packetId'];
-
-
-        error_log("===============" . var_export($_GET, true));
-
+        $isOver = isset($_GET['viewDetails']) ? true : false;
         $redPacketInfo = $this->getRedPacketInfo($packetId);
 
         if (!$redPacketInfo) {
@@ -35,6 +32,7 @@ class Page_GrabController extends MiniRedController
 
         $grabbersCount = $this->getRedPacketGrabbersCount($packetId);
         $isGrabbedOver = $grabbersCount >= $redPacketQuantity;
+        $isOver = $isOver && $isGrabbedOver;
 
         $sendUserProfile = $this->dcApi->getUserProfile($sendUserId);
 
@@ -53,7 +51,7 @@ class Page_GrabController extends MiniRedController
             'redPacketDesc' => !empty($redPacketDesc) ? $redPacketDesc : "恭喜发财，万事如意",
         ];
 
-        if ($isGrabber) {
+        if ($isGrabber || $isOver) {
             //get grabbers
             $grabbers = $this->getRedPacketGrabbersWithProfile($packetId);
             $params['redPacketGrabbers'] = $grabbers;
@@ -68,7 +66,6 @@ class Page_GrabController extends MiniRedController
             }
             echo $this->display("redPacket_grabber", $params);
         } else {
-
             if ($isGrabbedOver) {
                 $params['redPacketDesc'] = "手慢了，红包派完了";
             }

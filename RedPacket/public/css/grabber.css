@@ -112,7 +112,7 @@ html, body {
 }
 
 .item-title-content {
-    width: 118px;
+    width: 100%;
     height: 14px;
     font-size: 12px;
     font-family: PingFangSC-Regular;

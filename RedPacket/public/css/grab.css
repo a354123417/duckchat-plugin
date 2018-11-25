@@ -68,7 +68,7 @@ html, body {
     margin-top: 45px;
 }
 
-.red-open-buttom {
+.red-open-button {
     width: 96px;
     height: 96px;
     background: rgba(238, 204, 144, 1);
@@ -86,6 +86,12 @@ html, body {
     outline: none;
 }
 
-.red-open-buttom:active {
+.red-open-button:active {
     background: blue;
+}
+
+.red-grab-over {
+    position: absolute;
+    bottom: 10rem;
+    color: rgba(252, 228, 186, 1);
 }
