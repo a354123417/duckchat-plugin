@@ -16,8 +16,11 @@ class DuckChatUserAccountRecordsDao extends BaseDao
         "amount",
         "type", // 1：充值 2：提现
         "remarks",
-        "status",   //0 未处理状态   1：处理完成状态
+        "status",   //0 未处理状态   1：处理完成状态 -1 拒绝
+        "adminUserId",
+        "adminFeedback",
         "createTime",
+        "finishTime",
     ];
 
     private $queryColumns;

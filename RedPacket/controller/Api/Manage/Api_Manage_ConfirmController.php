@@ -32,19 +32,31 @@ class Api_Manage_ConfirmController extends MiniRedController
         ];
         $recordId = isset($_POST['recordId']) ? $_POST['recordId'] : "";
 
+        $agreeStatus = true;//false;
+
+        $feedBack = "账户金额错误";
+
         if (empty($recordId)) {
             throw new Exception("错误：记录ID为空");
         }
 
         $recordInfo = $this->getRecord($recordId);
 
-        if ($recordInfo["status"] == 1) {
+        if ($recordInfo["status"] >= 1) {
             throw new Exception("错误：交易记录已完成");
+        } elseif ($recordInfo["status"] <= -1) {
+            throw new Exception("错误：交易已被拒绝");
         }
 
-        if (RedPacketStatus::AccountRechargeType == $recordInfo["type"]) {
-            //充值
-        } elseif (RedPacketStatus::AccountWithdrawType == $recordInfo["type"]) {
+
+        if ($agreeStatus) {
+            if (RedPacketStatus::AccountRechargeType == $recordInfo["type"]) {
+                //充值
+            } elseif (RedPacketStatus::AccountWithdrawType == $recordInfo["type"]) {
+
+            }
+        } else {
+            //refuse
 
         }
 
@@ -54,5 +66,18 @@ class Api_Manage_ConfirmController extends MiniRedController
     private function getRecord($recordId)
     {
         return $this->ctx->DuckChatUserAccountRecordsDao->queryAccountRecord($recordId);
+    }
+
+    private function refuseRecord($recordId, $feedBack)
+    {
+//        $data = [
+//            ""=>
+//        ];
+//
+//        $where = [];
+//
+//        return $this->ctx->DuckChatUserAccountRecordsDao->updateAccountRecords();
+
+        return;
     }
 }

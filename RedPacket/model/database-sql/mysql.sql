@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS DuckChatUserAccountRecords (
   adminUserId VARCHAR(100) not null,
   adminFeedback TEXT,
   createTime BIGINT,
+  finishTime BIGINT,
   INDEX(userId))DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS DuckChatRedPacket (
