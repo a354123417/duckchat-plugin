@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>我的余额</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="./public/css/recharge.css"/>
+    <link rel="stylesheet" href="./public/css/recharge.css?v=1"/>
 </head>
 <body>
 <div class="wrapper">
@@ -24,12 +24,13 @@
     </div>
 </div>
 <script type="text/javascript" src="./public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 <script type="text/javascript" src="./public/sdk/zalyjsNative.js"></script>
 <script type="text/javascript">
 
     $(".recharge_money").on("input porpertychange", function () {
         var valueMoney = $(".recharge_money").val();
-        if(valueMoney != undefined && valueMoney.length>0) {
+        if (valueMoney != undefined && valueMoney.length > 0) {
             $(".confirm_operation").removeClass("submit_disable");
             $(".confirm_operation").addClass("submit");
             return;
@@ -39,11 +40,25 @@
     });
 
     $(".confirm_operation").on("click", function () {
-         var money = $(".recharge_money").val();
-         var remark = $(".remark").val();
-         //TODO post recharge
+        var money = $(".recharge_money").val();
+        var remark = $(".remark").val();
+        //TODO post recharge
+
+        alert("money=" + money);
+        alert("remark=" + remark);
+
+        var url = "./index.php?action=";
+        var data = {
+            "money": money,
+            "remark": remark
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, rechargeResponse);
     });
 
+    function rechargeResponse(url, data, result) {
+
+    }
 
 </script>
 </body>

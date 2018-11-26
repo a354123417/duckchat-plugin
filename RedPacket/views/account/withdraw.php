@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>我的余额</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="./public/css/recharge.css"/>
+    <link rel="stylesheet" href="./public/css/recharge.css?v=2"/>
 </head>
 <body>
 <div class="wrapper">
@@ -18,7 +18,8 @@
             <div class="line">
             </div>
             <div class="withdraw_tip">
-                当前全部余额￥<span class="all_money">2220</span>，<span class="withdraw_all">全部提现</span>
+                当前全部余额￥<span class="all_money"><?php echo $account['amount']; ?></span>，<span
+                        class="withdraw_all">全部提现</span>
             </div>
             <button class="confirm_operation submit_disable">提现</button>
         </div>
@@ -36,6 +37,8 @@
     $(".confirm_operation").on("click", function () {
         var money = $(".withdraw_money").val();
         //TODO post withdraw
+
+        alert("withDraw money=" + money);
     });
 
 
@@ -47,7 +50,7 @@
 
     function checkOperstaionButtonStatus() {
         var valueMoney = $(".withdraw_money").val();
-        if(valueMoney != undefined && valueMoney.length>0) {
+        if (valueMoney != undefined && valueMoney.length > 0) {
             $(".confirm_operation").removeClass("submit_disable");
             $(".confirm_operation").addClass("submit");
             return;

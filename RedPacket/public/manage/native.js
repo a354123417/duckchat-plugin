@@ -82,7 +82,6 @@ function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
         method: "POST",
         data: jsonBody,
         success: function (result) {
-
             callBack(url, jsonBody, result);
 
         },
@@ -90,7 +89,6 @@ function zalyjsCommonAjaxPostJson(url, jsonBody, callBack) {
             alert("error");
         }
     });
-
 }
 
 /**
