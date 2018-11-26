@@ -159,7 +159,7 @@ class DuckChatUserAccountRecordsDao extends BaseDao
             $sql .= " and status=:status";
         }
 
-        $sql .= " limit :offset,:limit;";
+        $sql .= " order by id desc limit :offset,:limit;";
 
         $offset = ($pageNum - 1) * $pageSize;
 
