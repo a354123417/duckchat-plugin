@@ -61,7 +61,7 @@ class DuckChatUserAccountRecordsDao extends BaseDao
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
         } finally {
-            $this->logger->writeSqlLog($tag, $sql, $userId, $startTime);
+            $this->logger->writeSqlLog($tag, $sql, $recordId, $startTime);
         }
         return false;
     }

@@ -69,7 +69,7 @@ abstract class MiniRedController extends MiniProgramController
                 $userAvatar = $userProfile["body"]["profile"]["public"]["avatar"];
 
                 $grabber["nickname"] = $userNickname;
-                $grabber["avatar"] = $this->siteAddress . "/_api_file_download_/?fileId=" . $userAvatar;
+                $grabber["avatar"] = $this->getAvatarPath($userAvatar);
 
                 $grabbersProfile[] = $grabber;
             }
@@ -77,6 +77,45 @@ abstract class MiniRedController extends MiniProgramController
         }
 
         return $grabbersProfile;
+    }
+
+    protected function getUserProfile($userId)
+    {
+        $userProfile = $this->dcApi->getUserProfile($userId);
+
+        $userProfile = json_decode($userProfile, true);
+
+        $userNickname = $userProfile["body"]["profile"]["public"]["nickname"];
+        $userAvatar = $userProfile["body"]["profile"]["public"]["avatar"];
+        $loginName = $userProfile["body"]["profile"]["public"]["loginName"];
+        $userInfo = [];
+        $userInfo["nickname"]  = $userNickname;
+        $userInfo["avatar"]    = $this->getAvatarPath($userAvatar);
+        $userInfo['loginName'] = $loginName;
+
+        return $userInfo;
+    }
+
+    protected  function getAvatarPath($userAvatar)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        if (empty($userAvatar)) {
+            return null;
+        }
+        try {
+            $fileNameArray = explode("-", $userAvatar);
+            $dirName = $fileNameArray[0];
+            $fileName = $fileNameArray[1];
+
+            $fileName = str_replace("../", "", $fileName);
+            $dirName  = str_replace("../", "", $dirName);
+
+            return  $this->siteAddress . "/attachment/".$dirName . "/" . $fileName;
+        } catch (Exception $e) {
+            $this->wpf_Logger->error($tag, $e->getMessage());
+        }
+        return null;
+
     }
 
     protected function getRedPacketGrabbersCount($packetId)

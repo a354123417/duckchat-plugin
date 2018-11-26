@@ -17,6 +17,7 @@ class DC_Open_Api
     private $secretKey;
     private $serverAddress;
     private $requestTimeOut;//默认超时时间3s
+    const DC_CURLOPT_TIMEOUT=3;
 
     public function __construct($serverAddress, $miniProgramId, $secretKey, $requestTimeOut = 3)
     {
@@ -279,7 +280,7 @@ class DC_Open_Api
             $_curlObj = curl_init();
 
             curl_setopt($_curlObj, CURLOPT_URL, $url);
-            curl_setopt($_curlObj, CURLOPT_TIMEOUT, DC_CURLOPT_TIMEOUT);//3s timeout
+            curl_setopt($_curlObj, CURLOPT_TIMEOUT, self::DC_CURLOPT_TIMEOUT);//3s timeout
             curl_setopt($_curlObj, CURLOPT_NOBODY, false);
             curl_setopt($_curlObj, CURLOPT_POST, true);
             curl_setopt($_curlObj, CURLOPT_POSTFIELDS, $params);
