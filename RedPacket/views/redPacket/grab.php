@@ -54,7 +54,7 @@
           </div>
         <div class="red-center open_btn">
             <?php if ($isGrabbedOver) { ?>
-                <div class="red-grab-over" onclick="showDetails('<?php echo $packetId; ?>');">点击查看领取详情</div>
+                <div class="red-grab-over" style="bottom:-20%;top:0%;" onclick="showDetails('<?php echo $packetId; ?>');">点击查看领取详情</div>
             <?php } else { ?>
                 <button class="red-open-button" onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
             <?php } ?>
