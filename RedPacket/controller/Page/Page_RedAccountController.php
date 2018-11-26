@@ -20,22 +20,26 @@ class Page_RedAccountController extends MiniRedController
                 echo $this->display("account_recharge", []);
                 break;
             case "withdraw":
-                echo $this->display("account_withdraw", []);
+                $account = $this->getUserAccount($this->userId);
+                $params["account"] = $account;
+                echo $this->display("account_withdraw", $params);
                 break;
             default:
-                echo $this->display("account_index", []);
+                $account = $this->getUserAccount($this->userId);
+                $params["account"] = $account;
+                echo $this->display("account_index", $params);
         }
 
         return;
     }
+
 
     /**
      * http post request
      */
     protected function doPost()
     {
-        // TODO: Implement doPost() method.
-        error_log("===========do post request");
+        return true;
     }
 
 }
