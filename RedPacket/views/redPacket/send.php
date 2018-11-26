@@ -121,6 +121,9 @@
         .margin_desc {
             margin-top: 20px;
         }
+        .red_packet_textarea {
+            resize: none;
+        }
 
     </style>
 
@@ -229,6 +232,9 @@
 
     $(document).on("input propertychange","#rp-amount-input", function (event) {
         var trueAmount = $("#rp-amount-input").val();
+        if(trueAmount == undefined || trueAmount == "") {
+            return;
+        }
         var amount = trueAmount;
         if(amount.indexOf(".") == -1) {
             amount = trueAmount+".00";
@@ -285,6 +291,9 @@
 
     $(document).on("blur","#rp-amount-input", function (event) {
         var amount = $("#rp-amount-input").val();
+        if(amount == undefined || amount == "") {
+            return;
+        }
         if(amount.indexOf(".") == -1) {
             amount = amount+".00";
         }
@@ -338,6 +347,13 @@
         }
         zalyjsClosePage();
     }
+
+    $("#red-packet-amount").on("click", function () {
+        $("#rp-amount-input").focus();
+    });
+    $("#red-packet-quantity").on("click", function () {
+        $("#rp-quantity-input").focus();
+    });
 
 </script>
 
