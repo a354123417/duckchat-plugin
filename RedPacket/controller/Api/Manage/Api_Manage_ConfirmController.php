@@ -30,44 +30,52 @@ class Api_Manage_ConfirmController extends MiniRedController
         $params = [
             "errCode" => "error",
         ];
-        $recordId = isset($_POST['recordId']) ? $_POST['recordId'] : "";
-        $recordId = trim($recordId);
 
-        $agreeStatus = isset($_POST['agreeStatus']) ? $_POST['agreeStatus'] : false;
-
-        $feedBack = isset($_POST['feedBack']) ? $_POST['feedBack'] : "账户金额错误";
-
-        if (empty($recordId)) {
-            throw new Exception("错误：记录ID为空");
-        }
-
-        $recordInfo = $this->getRecord($recordId);
-
-        if ($recordInfo["status"] >= 1) {
-            throw new Exception("错误：交易记录已完成");
-        } elseif ($recordInfo["status"] <= -1) {
-            throw new Exception("错误：交易已被拒绝");
-        }
-
-        if ($agreeStatus) {
-            $applyUserId = $recordInfo["userId"];
-            $applyUserAccount = $this->ctx->DuckChatUserAccountDao->queryUserAccount($applyUserId);
-            $applyId = $applyUserAccount["id"];
-            if (RedPacketStatus::AccountRechargeType == $recordInfo["type"]) {
-                //充值
-            } elseif (RedPacketStatus::AccountWithdrawType == $recordInfo["type"]) {
-
+        try {
+            $recordId = isset($_POST['recordId']) ? $_POST['recordId'] : "";
+            $recordId = trim($recordId);
+            $agreeStatus = isset($_POST['agreeStatus']) ? $_POST['agreeStatus'] : false;
+            $feedBack = isset($_POST['feedBack']) ? $_POST['feedBack'] : "账户金额错误";
+            if (empty($recordId)) {
+                throw new Exception("错误：记录ID为空");
             }
-        } else {
-            //refuse
-            $result = $this->refuseRecord($recordId, $feedBack);
-            if ($result) {
-                $params["errCode"] = "success";
+            $recordInfo = $this->getRecord($recordId);
+            if ($recordInfo["status"] >= 1) {
+                throw new Exception("错误：交易记录已完成");
+            } elseif ($recordInfo["status"] <= -1) {
+                throw new Exception("错误：交易已被拒绝");
+            }
+            if ($agreeStatus) {
+                $applyUserId = $recordInfo["userId"];
+                $applyUserAccount = $this->ctx->DuckChatUserAccountDao->queryUserAccount($applyUserId);
+                $applyId = $applyUserAccount["id"];
+                $result = false;
+                if (RedPacketStatus::AccountRechargeType == $recordInfo["type"]) {
+                    //充值
+                    $result = $this->agreeRecharge($applyId, $applyUserId, $recordId, $feedBack);
+                } elseif (RedPacketStatus::AccountWithdrawType == $recordInfo["type"]) {
+                    $result = $this->agreeWithdraw($applyId, $applyUserId, $recordId, $feedBack);
+                }
+                if ($result) {
+                    $params["errCode"] = "success";
+                } else {
+                    $params["errInfo"] = "同意操作失败";
+                }
             } else {
-                $params["errInfo"] = "拒绝操作失败";
+                //refuse
+                $result = $this->refuseRecord($recordId, $feedBack);
+                if ($result) {
+                    $params["errCode"] = "success";
+                } else {
+                    $params["errInfo"] = "拒绝操作失败";
+                }
             }
+        } catch (Exception $e) {
+            $params["errInfo"] = $e->getMessage();
+            $this->logger->error($this->action, $e);
         }
 
+        echo json_encode($params);
         return;
     }
 
@@ -153,10 +161,11 @@ class Api_Manage_ConfirmController extends MiniRedController
             $result = $this->checkoutStatus($withdrawStatus);
 
             $applyUserAccount = $this->ctx->DuckChatUserAccountDao->queryAccountForLock($applyId);
-
+            error_log("======user account info =" . var_export($applyUserAccount, true));
             if (!empty($applyUserAccount)) {
-
                 $userHasAmount = $applyUserAccount["amount"];
+                error_log("======user has amount info =" . $userHasAmount);
+                error_log("======user withdraw amount info =" . $withdrawAmount);
                 if ($userHasAmount < $withdrawAmount) {
                     throw new Exception("用户账户金额不足");
                 }
@@ -174,7 +183,7 @@ class Api_Manage_ConfirmController extends MiniRedController
             ];
             $result = $this->ctx->DuckChatUserAccountDao->updateUserAccount($data, $where);
 
-            if ($result) {
+            if (!$result) {
                 throw new Exception("更新用户账户金额失败");
             }
 
@@ -189,6 +198,7 @@ class Api_Manage_ConfirmController extends MiniRedController
         } catch (Exception $e) {
             $this->ctx->db->rollBack();
             $this->logger->error($tag, $e);
+            throw $e;
         }
 
         return false;
@@ -200,7 +210,7 @@ class Api_Manage_ConfirmController extends MiniRedController
             throw new Exception("错误：交易记录已完成");
         } elseif ($status <= -1) {
             throw new Exception("错误：交易已被拒绝");
-        } elseif ($status !== 0) {
+        } elseif ($status != 0) {
             throw new Exception("错误：交易状态错误");
         }
 

@@ -14,7 +14,7 @@ class Api_Account_WithdrawController extends MiniRedController
      */
     protected function doGet()
     {
-        // TODO: Implement doGet() method.
+        return false;
     }
 
     /**
@@ -28,15 +28,34 @@ class Api_Account_WithdrawController extends MiniRedController
         $money = trim($_POST['money']);
         $remarks = "";
 
-        if (empty($money)) {
-            $params["errInfo"] = "金额不能为空";
-        } else {
-            $result = $this->withdrawMoney($this->userId, $money, $remarks);
-            if ($result) {
-                $params["errCode"] = "success";
+        try {
+            if (empty($money)) {
+                $params["errInfo"] = "金额不能为空";
             } else {
-                $params["errInfo"] = "提现失败，请重试";
+
+                $userAccount = $this->getUserAccount($this->userId);
+
+                if (empty($userAccount)) {
+                    throw new Exception("账户金额为空");
+                } else {
+
+                    $userHasAmount = $userAccount["amount"];
+
+                    if ($userHasAmount < $money) {
+                        throw new Exception("账户金额不足");
+                    }
+                }
+
+                $result = $this->withdrawMoney($this->userId, $money, $remarks);
+                if ($result) {
+                    $params["errCode"] = "success";
+                } else {
+                    $params["errInfo"] = "提现失败，请重试";
+                }
             }
+        } catch (Exception $e) {
+            $params["errInfo"] = $e->getMessage();
+            $this->logger->error($this->action, $e);
         }
 
         echo json_encode($params);

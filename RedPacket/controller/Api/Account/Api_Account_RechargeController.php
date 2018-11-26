@@ -25,18 +25,23 @@ class Api_Account_RechargeController extends MiniRedController
         $params = [
             "errCode" => "error",
         ];
-        $money = trim($_POST['money']);
-        $remarks = "";
 
-        if (empty($money)) {
-            $params["errInfo"] = "金额不能为空";
-        } else {
-            $result = $this->rechargeMoney($this->userId, $money, $remarks);
-            if ($result) {
-                $params["errCode"] = "success";
+        try {
+            $money = trim($_POST['money']);
+            $remarks = "";
+            if (empty($money)) {
+                $params["errInfo"] = "金额不能为空";
             } else {
-                $params["errInfo"] = "充值失败，请重试";
+                $result = $this->rechargeMoney($this->userId, $money, $remarks);
+                if ($result) {
+                    $params["errCode"] = "success";
+                } else {
+                    $params["errInfo"] = "充值失败，请重试";
+                }
             }
+        } catch (Exception $e) {
+            $params["errInfo"] = $e->getMessage();
+            $this->logger->error($this->action, $e);
         }
 
         echo json_encode($params);

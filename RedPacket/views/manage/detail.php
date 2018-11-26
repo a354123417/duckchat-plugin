@@ -30,7 +30,7 @@
 
         .remark {
             width: 95%;
-            height: 160px;
+            height: 80px;
             background: rgba(248, 248, 248, 1);
             border-radius: 4px;
             border: 1px solid #DFDFDF;
@@ -172,9 +172,6 @@
         var recordId = $(this).attr("record-id");
         var remark = $(".remark").val();
 
-        alert("agreeStatus=" + selectRadioValue);
-
-        return;
         var data = {
             "recordId": recordId,
             "agreeStatus": selectRadioValue,
