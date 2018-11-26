@@ -236,13 +236,16 @@
     }
 
 
-    function checkQuantity(value) {
+    function checkQuantity(value, trueAmount) {
         var reg = new RegExp("^[0-9]*$");
         if (!reg.test(value)) {
             return false;
         }
 
         if (value > 1000 || value <= 0) {
+            return false;
+        }
+        if(value > trueAmount*100) {
             return false;
         }
 
@@ -296,7 +299,7 @@
     function checkRedSendBtn() {
         var trueAmount = $("#rp-amount-input").val();
         var quantity = $("#rp-quantity-input").val();
-        var isQuantity = checkQuantity(quantity);
+        var isQuantity = checkQuantity(quantity, trueAmount);
         var isAmount = checkMoney(trueAmount);
         if (isQuantity && isAmount) {
             $(".red_packet_send").addClass("red_packet_send_enable");
