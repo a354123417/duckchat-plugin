@@ -5,22 +5,24 @@
     <meta charset="UTF-8">
     <title>管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="./public/css/record_detail.css?v=2"/>
+    <link rel="stylesheet" href="./public/css/record_detail.css?v=3"/>
     <style>
         .site-manage-image {
             border-radius: 0;
         }
+
         .loginName_div {
             height: 18px;
             line-height: 18px;
             text-align: left;
         }
+
         .nickname_div {
-            font-size:12px;
-            font-family:PingFangSC-Regular;
-            font-weight:400;
-            color:rgba(153,153,153,1);
-            line-height:12px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153, 153, 153, 1);
+            line-height: 12px;
             height: 12px;
             margin-top: 5px;
             text-align: left;
@@ -41,7 +43,7 @@
             color: rgba(153, 153, 153, 1);
             padding: 10px;
         }
-        </style>
+    </style>
 </head>
 
 <body>
@@ -54,16 +56,16 @@
 
                 <div class="item-row" id="site-custom-page">
                     <div class="item-header">
-                        <img class="site-manage-image" src="<?php echo $record["avatar"];;?>"/>
+                        <img class="site-manage-image" src="<?php echo $record["avatar"];; ?>"/>
                     </div>
                     <div class="item-body">
                         <div class="item-body-display">
                             <div class="item-body-desc">
                                 <div class="loginName_div">
-                                   ID: <?php echo $record['loginName'];?>
+                                    ID: <?php echo $record['loginName']; ?>
                                 </div>
                                 <div class="nickname_div">
-                                   昵称: <?php echo $record['nickname'];?>
+                                    昵称: <?php echo $record['nickname']; ?>
                                 </div>
                             </div>
                         </div>
@@ -169,10 +171,14 @@
         var selectRadioValue = $(".confirm_radio:checked").val();
         var recordId = $(this).attr("record-id");
         var remark = $(".remark").val();
+
+        alert("agreeStatus=" + selectRadioValue);
+
+        return;
         var data = {
             "recordId": recordId,
-            'operation':selectRadioValue,
-            "remark":remark
+            "agreeStatus": selectRadioValue,
+            "feedBack": remark,
         };
         var url = "<?php echo $serverAddress;?>/index.php?action=api.manage.confirm";
         zalyjsCommonAjaxPostJson(url, data, handleConfirmOperationResponse)

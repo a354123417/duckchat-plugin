@@ -32,9 +32,10 @@ class Api_Manage_ConfirmController extends MiniRedController
         ];
         $recordId = isset($_POST['recordId']) ? $_POST['recordId'] : "";
         $recordId = trim($recordId);
-        $agreeStatus = true;//false;
 
-        $feedBack = "账户金额错误";
+        $agreeStatus = isset($_POST['agreeStatus']) ? $_POST['agreeStatus'] : false;
+
+        $feedBack = isset($_POST['feedBack']) ? $_POST['feedBack'] : "账户金额错误";
 
         if (empty($recordId)) {
             throw new Exception("错误：记录ID为空");
@@ -48,9 +49,7 @@ class Api_Manage_ConfirmController extends MiniRedController
             throw new Exception("错误：交易已被拒绝");
         }
 
-
         if ($agreeStatus) {
-
             $applyUserId = $recordInfo["userId"];
             $applyUserAccount = $this->ctx->DuckChatUserAccountDao->queryUserAccount($applyUserId);
             $applyId = $applyUserAccount["id"];
