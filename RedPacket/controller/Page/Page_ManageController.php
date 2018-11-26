@@ -60,9 +60,12 @@ class Page_ManageController extends MiniRedController
             throw new Exception("记录ID为空");
         }
 
-
         $recordInfo = $this->ctx->DuckChatUserAccountRecordsDao->queryAccountRecord($recordId);
 
+        $userInfo = $this->getUserProfile($recordInfo['userId']);
+        $recordInfo['nickname'] = $userInfo['nickname'];
+        $recordInfo['avatar'] = $userInfo['avatar'];
+        $recordInfo['loginName'] = $userInfo['loginName'];
         return $recordInfo;
     }
 

@@ -6,15 +6,56 @@
     <title>管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="./public/css/record_detail.css?v=2"/>
-
+    <style>
+        .site-manage-image {
+            border-radius: 0;
+        }
+        .loginName_div {
+            height: 18px;
+            line-height: 18px;
+            text-align: left;
+        }
+        .nickname_div {
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(153,153,153,1);
+            line-height:12px;
+            height: 12px;
+            margin-top: 5px;
+            text-align: left;
+        }
+        </style>
 </head>
 
 <body>
 
 <div class="wrapper_div">
     <div class="wrapper" id="wrapper">
+
         <div class="layout-all-row">
             <div class="list-item-center">
+
+                <div class="item-row" id="site-custom-page">
+                    <div class="item-header">
+                        <img class="site-manage-image" src="<?php echo $record["avatar"];;?>"/>
+                    </div>
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">
+                                <div class="loginName_div">
+                                   ID: <?php echo $record['loginName'];?>
+                                </div>
+                                <div class="nickname_div">
+                                   昵称: <?php echo $record['nickname'];?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="division-line"></div>
+
 
                 <div class="item-row">
                     <div class="item-body">
@@ -85,6 +126,8 @@
 
 
     <?php if ($record['status'] == 0) { ?>
+        <input type="radio" class="confirm_radio" name="confirm_radio" value="0">拒绝
+        <input type="radio" class="confirm_radio" name="confirm_radio" value="1" checked>同意
         <button class="confirm_operation" record-id="<?php echo $record["id"]; ?>">确认并执行操作</button>
     <?php } ?>
 
@@ -104,9 +147,11 @@
     }
 
     $(".confirm_operation").on("click", function () {
+        var selectRadioValue = $(".confirm_radio:checked").val();
         var recordId = $(this).attr("record-id");
         var data = {
-            "recordId": recordId
+            "recordId": recordId,
+            'operation':selectRadioValue
         };
         var url = "<?php echo $serverAddress;?>/index.php?action=api.manage.confirm";
         zalyjsCommonAjaxPostJson(url, data, handleConfirmOperationResponse)
