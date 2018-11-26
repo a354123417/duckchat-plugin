@@ -51,6 +51,12 @@ class Page_GrabController extends MiniRedController
             'redPacketDesc' => !empty($redPacketDesc) ? $redPacketDesc : "恭喜发财，万事如意",
         ];
 
+
+        if ($redPacketSendTime > $this->getCurrentTimeMills() - 24 * 60 * 60 * 1000) {
+
+        }
+
+
         if ($isGrabber || $isOver) {
             //get grabbers
             $grabbers = $this->getRedPacketGrabbersWithProfile($packetId);

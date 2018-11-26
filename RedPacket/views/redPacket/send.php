@@ -67,10 +67,10 @@
             background: rgba(255, 255, 255, 1);
         }
 
-        .red_packet_send_disabled{
+        .red_packet_send_disabled {
             width: 100%;
             height: 50px;
-            background:rgba(226,195,196,1);
+            background: rgba(226, 195, 196, 1);
             border-radius: 6px 7px 7px 7px;
             font-size: 18px;
             font-family: PingFangSC-Medium;
@@ -79,7 +79,7 @@
             border-width: 0;
             outline: none;
             cursor: pointer;
-            disabled:disabled;
+            disabled: disabled;
         }
 
         .red_packet_send_enable {
@@ -121,6 +121,7 @@
         .margin_desc {
             margin-top: 20px;
         }
+
         .red_packet_textarea {
             resize: none;
         }
@@ -152,25 +153,25 @@
                     </div>
                 </div>
             </div>
-            <?php if($isGroup): ?>
-            <div class="red_packet_tip">拼手气红包</div>
+            <?php if ($isGroup): ?>
+                <div class="red_packet_tip">拼手气红包</div>
 
-            <div class="item-row red_packet_bg margin_amount" id="red-packet-quantity">
-                <div class="item-body">
-                    <div class="item-body-display">
-                        <div class="item-body-desc">红包个数</div>
-                        <div class="item-body-tail">
-                            <div class="item-body-value">
-                                <input type="number" min="1" max="100" class="red_packet_input" placeholder="数量"
-                                       id="rp-quantity-input">
+                <div class="item-row red_packet_bg margin_amount" id="red-packet-quantity">
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">红包个数</div>
+                            <div class="item-body-tail">
+                                <div class="item-body-value">
+                                    <input type="number" min="1" max="100" class="red_packet_input" placeholder="数量"
+                                           id="rp-quantity-input">
+                                </div>
+                                <div class="item-body-value-more">个</div>
                             </div>
-                            <div class="item-body-value-more">个</div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
-            <div class="red_packet_tip">本群共X人</div>
+                <div class="red_packet_tip">本群共X人</div>
             <?php else : ?>
                 <div class="item-row red_packet_bg margin_amount" id="red-packet-quantity" style="display: none">
                     <div class="item-body">
@@ -178,7 +179,8 @@
                             <div class="item-body-desc">红包个数</div>
                             <div class="item-body-tail">
                                 <div class="item-body-value">
-                                    <input type="number" min="1"  value="1" max="100" class="red_packet_input" placeholder="数量"
+                                    <input type="number" min="1" value="1" max="100" class="red_packet_input"
+                                           placeholder="数量"
                                            id="rp-quantity-input">
                                 </div>
                                 <div class="item-body-value-more">个</div>
@@ -247,18 +249,18 @@
         return true;
     }
 
-    $(document).on("input propertychange","#rp-amount-input", function (event) {
+    $(document).on("input propertychange", "#rp-amount-input", function (event) {
         var trueAmount = $("#rp-amount-input").val();
-        if(trueAmount == undefined || trueAmount == "") {
+        if (trueAmount == undefined || trueAmount == "") {
             return;
         }
         var amount = trueAmount;
-        if(amount.indexOf(".") == -1) {
-            amount = trueAmount+".00";
+        if (amount.indexOf(".") == -1) {
+            amount = trueAmount + ".00";
         }
         var amounts = amount.split(".");
 
-        amounts[0] = parseInt(amounts[0]+"", 10);
+        amounts[0] = parseInt(amounts[0] + "", 10);
 
         var trueAmounts = trueAmount.split(".");
         trueAmounts[0] = amounts[0];
@@ -266,7 +268,7 @@
 
         switch (amounts[1].length) {
             case 1:
-                amounts[1] =  amounts[1]+"0";
+                amounts[1] = amounts[1] + "0";
                 amount = amounts.join(".");
                 break;
             case 2:
@@ -279,11 +281,11 @@
         }
 
 
-        if(trueAmount > maxRedPacketMoney ) {
+        if (trueAmount > maxRedPacketMoney) {
             return;
         }
 
-        if(!checkMoney(amount)) {
+        if (!checkMoney(amount)) {
             return;
         }
         $(".red_packet_amount_for_send").html(amount);
@@ -291,13 +293,12 @@
     });
 
 
-    function checkRedSendBtn()
-    {
+    function checkRedSendBtn() {
         var trueAmount = $("#rp-amount-input").val();
         var quantity = $("#rp-quantity-input").val();
         var isQuantity = checkQuantity(quantity);
         var isAmount = checkMoney(trueAmount);
-        if(isQuantity && isAmount) {
+        if (isQuantity && isAmount) {
             $(".red_packet_send").addClass("red_packet_send_enable");
             $(".red_packet_send").removeClass("red_packet_send_disabled");
             return;
@@ -306,20 +307,20 @@
         $(".red_packet_send").addClass("red_packet_send_disabled");
     }
 
-    $(document).on("blur","#rp-amount-input", function (event) {
+    $(document).on("blur", "#rp-amount-input", function (event) {
         var amount = $("#rp-amount-input").val();
-        if(amount == undefined || amount == "") {
+        if (amount == undefined || amount == "") {
             return;
         }
-        if(amount.indexOf(".") == -1) {
-            amount = amount+".00";
+        if (amount.indexOf(".") == -1) {
+            amount = amount + ".00";
         }
         var amounts = amount.split(".");
-        if(amounts[1].length == 1) {
-            amounts[1] =  amounts[1]+"0";
+        if (amounts[1].length == 1) {
+            amounts[1] = amounts[1] + "0";
             amount = amounts.join(".");
         }
-        if(amounts[1].length >2) {
+        if (amounts[1].length > 2) {
             amounts[1] = amounts[1].substr(0, 2);
             amount = amounts.join(".");
         }
@@ -328,7 +329,6 @@
 
         checkRedSendBtn();
     });
-
 
 
     $("#rp-quantity-input").bind("input propertychange", function (event) {
@@ -353,16 +353,15 @@
 
     function sendResponse(url, data, result) {
         if (result) {
-
             var res = JSON.parse(result);
             if ("success" != res.errCode) {
                 alert(res.errInfo);
+            } else {
                 zalyjsClosePage();
             }
         } else {
             alert("发送红包失败");
         }
-        zalyjsClosePage();
     }
 
     $("#red-packet-amount").on("click", function () {
