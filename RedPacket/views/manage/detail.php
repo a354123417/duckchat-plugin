@@ -174,7 +174,6 @@
             'operation':selectRadioValue,
             "remark":remark
         };
-        console.log("--------"+JSON.stringify(data));
         var url = "<?php echo $serverAddress;?>/index.php?action=api.manage.confirm";
         zalyjsCommonAjaxPostJson(url, data, handleConfirmOperationResponse)
     });
