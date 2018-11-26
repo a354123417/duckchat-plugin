@@ -37,12 +37,16 @@ class Api_RedPacket_SendController extends MiniRedController
             $sendUserAccount = $this->getUserAccount($userId);
             $userAmount = $sendUserAccount["amount"];
 
-            if (empty($sendAmount) || $sendAmount < 0) {
+            if (empty($sendAmount) || $sendAmount < 0 || !is_numeric($sendAmount)) {
                 throw new Exception("发送余额错误");
             }
 
             if ($sendAmount > $userAmount) {
                 throw new Exception("账户余额不足，请联系站长充值");
+            }
+
+            if ($sendAmount < $quality * 0.01) {
+                throw new Exception("人均金额小雨0.01元");
             }
 
             $packetId = ZalyHelper::generateRandomKey(16, "0123456789");
