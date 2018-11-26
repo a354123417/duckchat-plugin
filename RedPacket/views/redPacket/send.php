@@ -79,6 +79,7 @@
             border-width: 0;
             outline: none;
             cursor: pointer;
+            disabled:disabled;
         }
 
         .red_packet_send_enable {
@@ -205,7 +206,6 @@
 
     function checkMoney(value) {
         var reg = new RegExp("^[0-9]+(.[0-9]{2})?$");
-        console.log("reg---------"+reg+'-----value----'+value);
         if (!reg.test(value)) {
             // alert("不符合!");
             return false;
@@ -223,6 +223,8 @@
         if (value > 1000 || value <= 0) {
             return false;
         }
+
+        return true;
     }
 
     $(document).on("input propertychange","#rp-amount-input", function (event) {
@@ -255,22 +257,31 @@
 
 
         if(trueAmount > maxRedPacketMoney ) {
-            $(".red_packet_send").removeClass("red_packet_send_enable");
-            $(".red_packet_send").addClass("red_packet_send_disabled");
             return;
         }
-        if(!checkMoney(amount)) {
-            $(".red_packet_send").removeClass("red_packet_send_enable");
-            $(".red_packet_send").addClass("red_packet_send_disabled");
-            return;
-        }
-        $(".red_packet_send").addClass("red_packet_send_enable");
-        $(".red_packet_send").removeClass("red_packet_send_disabled");
 
+        if(!checkMoney(amount)) {
+            return;
+        }
         $(".red_packet_amount_for_send").html(amount);
         $("#rp-amount-input").val(trueAmount);
     });
 
+
+    function checkRedSendBtn()
+    {
+        var trueAmount = $("#rp-amount-input").val();
+        var quantity = $("#rp-quantity-input").val();
+        var isQuantity = checkQuantity(quantity);
+        var isAmount = checkMoney(trueAmount);
+        if(isQuantity && isAmount) {
+            $(".red_packet_send").addClass("red_packet_send_enable");
+            $(".red_packet_send").removeClass("red_packet_send_disabled");
+            return;
+        }
+        $(".red_packet_send").removeClass("red_packet_send_enable");
+        $(".red_packet_send").addClass("red_packet_send_disabled");
+    }
 
     $(document).on("blur","#rp-amount-input", function (event) {
         var amount = $("#rp-amount-input").val();
@@ -289,11 +300,13 @@
         $("#rp-amount-input").val(amount);
         $(".red_packet_amount_for_send").html(amount);
 
+        checkRedSendBtn();
     });
 
-    $("#red-packet-quantity").bind("input propertychange", function (event) {
-        var quantity = $("#rp-quantity-input").val();
-        checkQuantity(quantity);
+
+
+    $("#rp-quantity-input").bind("input propertychange", function (event) {
+        checkRedSendBtn();
     });
 
 
