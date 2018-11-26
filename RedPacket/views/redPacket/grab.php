@@ -52,11 +52,11 @@
               </div>
               <div class="bg_circle"></div>
           </div>
-        <div class="red-center open_btn">
+        <div class="red-center open_btn" style="position: relative">
             <?php if ($isGrabbedOver) { ?>
-                <div class="red-grab-over" style="bottom:-20%;top:0%;" onclick="showDetails('<?php echo $packetId; ?>');">点击查看领取详情</div>
+                <div class="red-grab-over" style="position: absolute;bottom:50px;" onclick="showDetails('<?php echo $packetId; ?>');">点击查看领取详情</div>
             <?php } else { ?>
-                <button class="red-open-button" onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
+                <button class="red-open-button" style="position: absolute;bottom:100px;"  onclick="grabRedPacket('<?php echo $packetId; ?>')">開</button>
             <?php } ?>
         </div>
 
