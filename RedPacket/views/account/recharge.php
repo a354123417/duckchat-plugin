@@ -42,10 +42,6 @@
     $(".confirm_operation").on("click", function () {
         var money = $(".recharge_money").val();
         var remark = $(".remark").val();
-        //TODO post recharge
-
-        alert("money=" + money);
-        alert("remark=" + remark);
 
         var url = "./index.php?action=api.account.recharge";
         var data = {
@@ -57,7 +53,18 @@
     });
 
     function rechargeResponse(url, data, result) {
-        alert("result= " + result);
+        if (result) {
+            var res = JSON.parse(result);
+
+            if ("success" == res.errCode) {
+                alert("申请充值成功，等待站长审核");
+            } else {
+                alert("申请充值失败，" + res.errInfo);
+            }
+
+        } else {
+            alert("充值失败，请重试");
+        }
         zalyjsClosePage();
     }
 

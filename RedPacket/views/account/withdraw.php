@@ -56,8 +56,6 @@
     $(".confirm_operation").on("click", function () {
         var money = $(".withdraw_money").val();
 
-        alert("withDraw money=" + money);
-
         var url = "./index.php?action=api.account.withdraw";
         var data = {
             "money": money,
@@ -68,14 +66,12 @@
 
 
     function withdrawResponse(url, data, result) {
-
         if (result) {
             var res = JSON.parse(result);
-
             if ("success" != res.errCode) {
                 alert(res.errInfo);
             } else {
-                alert("申请提现成功");
+                alert("申请提现成功,等待站长审核");
             }
 
         } else {
