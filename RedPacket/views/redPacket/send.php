@@ -152,6 +152,7 @@
                     </div>
                 </div>
             </div>
+            <?php if($isGroup): ?>
             <div class="red_packet_tip">拼手气红包</div>
 
             <div class="item-row red_packet_bg margin_amount" id="red-packet-quantity">
@@ -170,6 +171,23 @@
                 </div>
             </div>
             <div class="red_packet_tip">本群共X人</div>
+            <?php else : ?>
+                <div class="item-row red_packet_bg margin_amount" id="red-packet-quantity" style="display: none">
+                    <div class="item-body">
+                        <div class="item-body-display">
+                            <div class="item-body-desc">红包个数</div>
+                            <div class="item-body-tail">
+                                <div class="item-body-value">
+                                    <input type="number" min="1"  value="1" max="100" class="red_packet_input" placeholder="数量"
+                                           id="rp-quantity-input">
+                                </div>
+                                <div class="item-body-value-more">个</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            <?php endif; ?>
 
 
             <div class="item-row margin_desc">
@@ -194,7 +212,6 @@
         </div>
 
     </div>
-
 
 </div>
 
