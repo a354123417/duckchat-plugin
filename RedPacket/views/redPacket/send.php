@@ -225,12 +225,6 @@
         }
     }
 
-    $("#red-packet-amount").bind("input propertychange", function (event) {
-        var amount = $("#rp-amount-input").val();
-
-
-    });
-
     $(document).on("input propertychange","#rp-amount-input", function (event) {
         var trueAmount = $("#rp-amount-input").val();
         var amount = trueAmount;
@@ -238,15 +232,27 @@
             amount = trueAmount+".00";
         }
         var amounts = amount.split(".");
-        if(amounts[1].length == 1) {
-            amounts[1] =  amounts[1]+"0";
-            amount = amounts.join(".");
+
+        amounts[0] = parseInt(amounts[0]+"", 10);
+
+        var trueAmounts = trueAmount.split(".");
+        trueAmounts[0] = amounts[0];
+        trueAmount = trueAmounts.join(".");
+
+        switch (amounts[1].length) {
+            case 1:
+                amounts[1] =  amounts[1]+"0";
+                amount = amounts.join(".");
+                break;
+            case 2:
+                amount = amounts.join(".");
+                break;
+            default:
+                amounts[1] = amounts[1].substr(0, 2);
+                amount = amounts.join(".");
+                trueAmount = amount;
         }
-        if(amounts[1].length >2) {
-            amounts[1] = amounts[1].substr(0, 2);
-            amount = amounts.join(".");
-            trueAmount = amount;
-        }
+
 
         if(trueAmount > maxRedPacketMoney ) {
             $(".red_packet_send").removeClass("red_packet_send_enable");
