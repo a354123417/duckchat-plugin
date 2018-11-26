@@ -84,7 +84,7 @@ class DuckChatUserAccountRecordsDao extends BaseDao
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
-            $prepare->bindValue(":id", $recordId);
+            $prepare->bindValue(":id", $recordId, PDO::PARAM_INT);
             $flag = $prepare->execute();
             $result = $prepare->fetch(\PDO::FETCH_ASSOC);
             if ($flag && $result) {
@@ -107,7 +107,7 @@ class DuckChatUserAccountRecordsDao extends BaseDao
         try {
             $prepare = $this->db->prepare($sql);
             $this->handlePrepareError($tag, $prepare);
-            $prepare->bindValue(":id", $recordId);
+            $prepare->bindValue(":id", $recordId, PDO::PARAM_INT);
             $flag = $prepare->execute();
             $result = $prepare->fetch(\PDO::FETCH_ASSOC);
             if ($flag && $result) {
@@ -169,11 +169,11 @@ class DuckChatUserAccountRecordsDao extends BaseDao
 
 
             if ($type !== false) {
-                $prepare->bindValue(":type", $type);
+                $prepare->bindValue(":type", $type, PDO::PARAM_INT);
             }
 
             if ($status !== false) {
-                $prepare->bindValue(":status", $status);
+                $prepare->bindValue(":status", $status, PDO::PARAM_INT);
             }
 
             $prepare->bindValue(":offset", $offset, PDO::PARAM_INT);

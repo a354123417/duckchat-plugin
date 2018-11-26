@@ -32,6 +32,11 @@ class Api_RedPacket_GrabController extends MiniRedController
                 throw new Exception("红包已经失效");
             }
             $totalAmount = $redPacketInfo['totalAmount'];
+
+            if (empty($totalAmount) || $totalAmount <= 0) {
+                throw new Exception("红包错误");
+            }
+
             $grabbers = $this->getRedPacketGrabbers($packetId);
             $grabberCount = empty($grabbers) ? 0 : count($grabbers);
             if ($grabberCount < $totalAmount) {
