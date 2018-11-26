@@ -4,6 +4,8 @@
  * Class BaseCtx
  *
  * @property DuckChatUserAccountDao DuckChatUserAccountDao
+ * @property DuckChatUserAccountRecordsDao DuckChatUserAccountRecordsDao
+ *
  * @property DuckChatRedPacketDao DuckChatRedPacketDao
  * @property DuckChatRedPacketGrabberDao DuckChatRedPacketGrabberDao
  *

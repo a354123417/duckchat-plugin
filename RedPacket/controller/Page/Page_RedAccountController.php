@@ -27,12 +27,19 @@ class Page_RedAccountController extends MiniRedController
             default:
                 $account = $this->getUserAccount($this->userId);
                 $params["account"] = $account;
+                $params["records"] = $this->getAccountRecords($this->userId);
                 echo $this->display("account_index", $params);
         }
 
         return;
     }
 
+    private function getAccountRecords($userId)
+    {
+        $records = $this->ctx->DuckChatUserAccountRecordsDao->queryAccountRecords($userId);
+        error_log("================get user account records=" . var_export($records, true));
+        return $records;
+    }
 
     /**
      * http post request
