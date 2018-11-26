@@ -43,6 +43,61 @@ class DuckChatUserAccountRecordsDao extends BaseDao
     }
 
 
+    public function agreeRecord($recordId, $adminUserId, $adminFeedback)
+    {
+        $data = [
+            "status" => RedPacketStatus::AccountDoneStatus,
+            "adminUserId" => $adminUserId,
+            "adminFeedback" => $adminFeedback,
+            "finishTime" => ZalyHelper::getCurrentTimeMillis(),
+        ];
+
+        $where = [
+            "id" => $recordId,
+        ];
+
+        return $this->updateAccountRecords($data, $where);
+    }
+
+    public function refuseRecord($recordId, $adminUserId, $adminFeedback)
+    {
+        $data = [
+            "status" => RedPacketStatus::AccountRefuseStatus,
+            "adminUserId" => $adminUserId,
+            "adminFeedback" => $adminFeedback,
+            "finishTime" => ZalyHelper::getCurrentTimeMillis(),
+        ];
+
+        $where = [
+            "id" => $recordId,
+        ];
+
+        return $this->updateAccountRecords($data, $where);
+    }
+
+    public function queryAccountRecordForLock($recordId)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $startTime = $this->getCurrentTimeMills();
+        $sql = "select $this->queryColumns from $this->table where id=:id for update nowait;";
+
+        try {
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":id", $recordId);
+            $flag = $prepare->execute();
+            $result = $prepare->fetch(\PDO::FETCH_ASSOC);
+            if ($flag && $result) {
+                return $result;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, $recordId, $startTime);
+        }
+        return false;
+    }
+
     public function queryAccountRecord($recordId)
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
