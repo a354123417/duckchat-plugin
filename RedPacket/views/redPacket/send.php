@@ -6,7 +6,7 @@
     <title>发红包</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="stylesheet" href="../../public/manage/config.css"/>
+    <link rel="stylesheet" href="../../public/manage/config.css?v=11"/>
 
     <style>
 
@@ -67,7 +67,21 @@
             background: rgba(255, 255, 255, 1);
         }
 
-        .red_packet_send {
+        .red_packet_send_disabled{
+            width: 100%;
+            height: 50px;
+            background:rgba(226,195,196,1);
+            border-radius: 6px 7px 7px 7px;
+            font-size: 18px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            border-width: 0;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .red_packet_send_enable {
             width: 100%;
             height: 50px;
             background: rgba(223, 84, 88, 1);
@@ -78,6 +92,7 @@
             color: rgba(255, 255, 255, 1);
             border-width: 0;
             outline: none;
+            cursor: pointer;
         }
 
         .red_packet_send:active {
@@ -163,13 +178,13 @@
                 <div class="red_packet_amount">
                     <div class="red_packet_real" id="red-packet-realamount">
                         <div>¥&nbsp;</div>
-                        <div>100.00</div>
+                        <div class="red_packet_amount_for_send">100.00</div>
                     </div>
                 </div>
             </div>
 
             <div class="item-row">
-                <button class="red_packet_send" onclick="sendRedPacket();">塞钱进红包</button>
+                <button class="red_packet_send  red_packet_send_disabled" onclick="sendRedPacket();">塞钱进红包</button>
             </div>
 
         </div>
@@ -186,13 +201,16 @@
 
 <script type="text/javascript">
 
+    var maxRedPacketMoney = 200;
 
-    function checkQuantity(value) {
+    function checkMoney(value) {
         var reg = new RegExp("^[0-9]+(.[0-9]{2})?$");
+        console.log("reg---------"+reg+'-----value----'+value);
         if (!reg.test(value)) {
-            alert("不符合!");
+            // alert("不符合!");
             return false;
         }
+        return true;
     }
 
 
@@ -213,6 +231,59 @@
 
     });
 
+    $(document).on("input propertychange","#rp-amount-input", function (event) {
+        var trueAmount = $("#rp-amount-input").val();
+        var amount = trueAmount;
+        if(amount.indexOf(".") == -1) {
+            amount = trueAmount+".00";
+        }
+        var amounts = amount.split(".");
+        if(amounts[1].length == 1) {
+            amounts[1] =  amounts[1]+"0";
+            amount = amounts.join(".");
+        }
+        if(amounts[1].length >2) {
+            amounts[1] = amounts[1].substr(0, 2);
+            amount = amounts.join(".");
+            trueAmount = amount;
+        }
+
+        if(trueAmount > maxRedPacketMoney ) {
+            $(".red_packet_send").removeClass("red_packet_send_enable");
+            $(".red_packet_send").addClass("red_packet_send_disabled");
+            return;
+        }
+        if(!checkMoney(amount)) {
+            $(".red_packet_send").removeClass("red_packet_send_enable");
+            $(".red_packet_send").addClass("red_packet_send_disabled");
+            return;
+        }
+        $(".red_packet_send").addClass("red_packet_send_enable");
+        $(".red_packet_send").removeClass("red_packet_send_disabled");
+
+        $(".red_packet_amount_for_send").html(amount);
+        $("#rp-amount-input").val(trueAmount);
+    });
+
+
+    $(document).on("blur","#rp-amount-input", function (event) {
+        var amount = $("#rp-amount-input").val();
+        if(amount.indexOf(".") == -1) {
+            amount = amount+".00";
+        }
+        var amounts = amount.split(".");
+        if(amounts[1].length == 1) {
+            amounts[1] =  amounts[1]+"0";
+            amount = amounts.join(".");
+        }
+        if(amounts[1].length >2) {
+            amounts[1] = amounts[1].substr(0, 2);
+            amount = amounts.join(".");
+        }
+        $("#rp-amount-input").val(amount);
+        $(".red_packet_amount_for_send").html(amount);
+
+    });
 
     $("#red-packet-quantity").bind("input propertychange", function (event) {
         var quantity = $("#rp-quantity-input").val();

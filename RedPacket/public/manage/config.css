@@ -100,7 +100,7 @@ html, body {
 }
 
 .item-body-value {
-    margin-left: 5px;
+    margin-left: 10px;
     line-height: 44px;
     justify-content: center; /*x轴对齐方式*/
     align-items: center; /*y轴对滴方式*/
