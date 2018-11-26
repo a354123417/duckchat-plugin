@@ -13,8 +13,12 @@ class Page_IndexController extends MiniRedController
      */
     protected function doGet()
     {
-        $this->getRequestParams();
-        echo $this->display("redPacket_send", []);
+        // $params = [
+        //  "isGroup" => true,
+        //  "roomId" => "xxx",
+        //];
+        $params = $this->getRequestParams();
+        echo $this->display("redPacket_send", $params);
         return;
     }
 

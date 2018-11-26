@@ -29,13 +29,13 @@
                         <div class="data cell">答复</div>
                     </div>
 
-                    <?php foreach ($billLogs as $log) { ?>
+                    <?php foreach ($records as $record) { ?>
                         <div class="row bill_id_<?php echo $log['id'] ?>" style="border-top: 1px solid #999999;">
-                            <div class="row-head cell"><?php echo $log['createTime'] ?></div>
-                            <div class="row-head cell"><?php echo $log['loginName'] ?></div>
-                            <div class="row-head cell"><?php echo $log['money'] ?></div>
-                            <div class="row-head cell"><?php echo $log['status'] ?></div>
-                            <div class="data cell"><?php echo $log['reply'] ?></div>
+                            <div class="row-head cell"><?php echo $record['createTime'] ?></div>
+                            <div class="row-head cell"><?php echo $record['loginName'] ?></div>
+                            <div class="row-head cell"><?php echo $record['money'] ?></div>
+                            <div class="row-head cell"><?php echo $record['status'] ?></div>
+                            <div class="data cell"><?php echo $record['reply'] ?></div>
                         </div>
                     <?php } ?>
 
