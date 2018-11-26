@@ -28,7 +28,7 @@ class DuckChatUserAccountDao extends BaseDao
     public function addUserAccount($data)
     {
         $data["createTime"] = ZalyHelper::getCurrentTimeMillis();
-        $data["status"] = 1;
+        $data["status"] = RedPacketStatus::AccountNormal;
         return $this->saveData($this->table, $data, $this->columns);
     }
 
@@ -55,7 +55,30 @@ class DuckChatUserAccountDao extends BaseDao
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
         } finally {
-            $this->logger->writeSqlLog($tag, $sql, $userId, $this->getCurrentTimeMills() - $startTime);
+            $this->logger->writeSqlLog($tag, $sql, $userId, $startTime);
+        }
+        return false;
+    }
+
+    public function queryAccountForLock($id)
+    {
+        $tag = __CLASS__ . "->" . __FUNCTION__;
+        $startTime = $this->getCurrentTimeMills();
+        $sql = "select $this->queryColumns from $this->table where id=:id for update nowait;";
+
+        try {
+            $prepare = $this->db->prepare($sql);
+            $this->handlePrepareError($tag, $prepare);
+            $prepare->bindValue(":id", $id);
+            $flag = $prepare->execute();
+            $result = $prepare->fetch(\PDO::FETCH_ASSOC);
+            if ($flag && $result) {
+                return $result;
+            }
+        } catch (Exception $e) {
+            $this->logger->error($tag, $e);
+        } finally {
+            $this->logger->writeSqlLog($tag, $sql, $id, $startTime);
         }
         return false;
     }
