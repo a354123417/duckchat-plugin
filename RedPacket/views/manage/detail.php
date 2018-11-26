@@ -25,6 +25,22 @@
             margin-top: 5px;
             text-align: left;
         }
+
+        .remark {
+            width: 95%;
+            height: 160px;
+            background: rgba(248, 248, 248, 1);
+            border-radius: 4px;
+            border: 1px solid #DFDFDF;
+            margin-top: 30px;
+            outline: none;
+            resize: none;
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153, 153, 153, 1);
+            padding: 10px;
+        }
         </style>
 </head>
 
@@ -126,8 +142,11 @@
 
 
     <?php if ($record['status'] == 0) { ?>
-        <input type="radio" class="confirm_radio" name="confirm_radio" value="0">拒绝
-        <input type="radio" class="confirm_radio" name="confirm_radio" value="1" checked>同意
+        <div style="background: white; padding:20px;">
+            <input type="radio" class="confirm_radio" name="confirm_radio" value="0">拒绝
+            <input type="radio" class="confirm_radio" name="confirm_radio" value="1" checked>同意
+            <textarea class="remark" placeholder="请填写理由…"></textarea>
+        </div>
         <button class="confirm_operation" record-id="<?php echo $record["id"]; ?>">确认并执行操作</button>
     <?php } ?>
 
@@ -149,10 +168,13 @@
     $(".confirm_operation").on("click", function () {
         var selectRadioValue = $(".confirm_radio:checked").val();
         var recordId = $(this).attr("record-id");
+        var remark = $(".remark").val();
         var data = {
             "recordId": recordId,
-            'operation':selectRadioValue
+            'operation':selectRadioValue,
+            "remark":remark
         };
+        console.log("--------"+JSON.stringify(data));
         var url = "<?php echo $serverAddress;?>/index.php?action=api.manage.confirm";
         zalyjsCommonAjaxPostJson(url, data, handleConfirmOperationResponse)
     });
