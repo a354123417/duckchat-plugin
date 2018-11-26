@@ -89,6 +89,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
             if (!in_array($action, $this->whiteAction)) {
 
+                error_log("================cookie=" . var_export($_COOKIE, true));
                 //兼容web
                 $duckchatSessionId = trim($_GET["duckchat_sessionid"]);
 

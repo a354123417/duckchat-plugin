@@ -68,8 +68,21 @@
 
 
     function withdrawResponse(url, data, result) {
-        alert(result);
 
+        if (result) {
+            var res = JSON.parse(result);
+
+            if ("success" != res.errCode) {
+                alert(res.errInfo);
+            } else {
+                alert("申请提现成功");
+            }
+
+        } else {
+            alert("提现失败，请重试");
+        }
+
+        zalyjsClosePage();
     }
 
 </script>

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS DuckChatUserAccountRecords (
   type int not null,
   remarks text,
   status int,
-  adminUserId VARCHAR(100) not null,
+  adminUserId VARCHAR(100),
   adminFeedback TEXT,
   createTime BIGINT,
   finishTime BIGINT,
