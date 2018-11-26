@@ -84,6 +84,7 @@ abstract class MiniProgramController extends \Wpf_Controller
             // 接收的数据流
             $this->requestData = file_get_contents("php://input");
 
+            error_log("===============_GET=" . var_export($_GET, true));
             error_log("===============_COOKIE=" . var_export($_COOKIE, true));
 
             $action = $_GET['action'];

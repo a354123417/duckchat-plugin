@@ -131,10 +131,7 @@ class Api_RedPacket_SendController extends MiniRedController
 
     private function proxyRedPacketMessage($packetId, $isGroup, $roomId)
     {
-        $scheme = $_SERVER['REQUEST_SCHEME'];
-        $serverHost = $_SERVER['HTTP_HOST'];
-
-        $serverAddress = $scheme . "://" . $serverHost;
+        $serverAddress = $this->getServerAddress();
 
         $fromUserId = $this->userId;
         $toId = $roomId;

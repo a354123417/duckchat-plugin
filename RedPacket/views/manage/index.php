@@ -13,38 +13,33 @@
             <div class="bill-log-div" style="margin-top:10px;">
                 <div class="table">
                     <div class="row" style="border-top: 1px solid #999999;">
-                        <div class="row-head cell">时间</div>
                         <div class="row-head cell">ID</div>
+                        <div class="row-head cell">时间</div>
                         <div class="row-head cell">金额</div>
                         <div class="row-head cell">状态</div>
                         <div class="data cell">操作</div>
                     </div>
 
-                    <div class="row" style="border-top: 1px solid #999999;">
-                        <div class="row-head cell">2012-09-12</div>
-                        <div class="row-head cell">少爷</div>
-                        <div class="row-head cell">10元</div>
-                        <div class="row-head cell">未提现</div>
-                        <div class="data cell operation"  record-id="11111">管理</div>
-                    </div>
-
-                    <div class="row" style="border-top: 1px solid #999999;">
-                        <div class="row-head cell">2012-09-12</div>
-                        <div class="row-head cell">少爷</div>
-                        <div class="row-head cell">10元</div>
-                        <div class="row-head cell">充值</div>
-                        <div class="data cell operation"  record-id="33333">管理</div>
-                    </div>
+                    <?php if (count($records)): ?>
+                        <?php foreach ($records as $record) : ?>
+                            <div class="row record_id_<?php echo $record['id'] ?>"
+                                 style="border-top: 1px solid #999999;">
+                                <div class="row-head cell"><?php echo $record['id'] ?></div>
+                                <div class="row-head cell"><?php echo date("H:i", $record['createTime'] / 1000); ?></div>
+                                <div class="row-head cell"><?php echo $record['amount'] ?></div>
 
 
-                    <?php if(count($datas)): ?>
-                        <?php foreach ($datas as $record) :?>
-                            <div class="row record_id_<?php echo $record['id']?>" style="border-top: 1px solid #999999;">
-                                <div class="row-head cell"><?php echo $record['id']?></div>
-                                <div class="row-head cell"><?php echo $record['loginName']?></div>
-                                <div class="row-head cell"><?php echo $record['money']?></div>
-                                <div class="row-head cell"><?php echo $record['status']?></div>
-                                <div class="data cell operation" record-id="<?php echo $record['id']?>" ><?php echo $record['reply']?></div>
+                                <?php if ($record['type'] == 1) { ?>
+                                    <div class="row-head cell">
+                                        充值<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
+                                <?php } elseif ($record['type'] == 2) { ?>
+                                    <div class="row-head cell">
+                                        提现<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
+                                <?php } ?>
+
+                                <div class="data cell operation"
+                                     record-id="<?php echo $record['id'] ?>"><?php echo $record['reply'] ?>详情
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -66,7 +61,7 @@
         <div class="row-head cell">{{loginName}}</div>
         <div class="row-head cell">{{money}}</div>
         <div class="row-head cell">{{status}}</div>
-        <div class="data cell operation" record-id="{{id}}" >{{reply}}</div>
+        <div class="data cell operation" record-id="{{id}}">{{reply}}</div>
     </div>
 </script>
 
@@ -80,28 +75,27 @@
             zalyjsOpenPage(url);
         }
     }
-    // http://192.168.3.152:8089/index.php?action=page.redAccount
+
     $(".operation").on("click", function () {
         var recordId = $(this).attr("record-id");
-        var url = "/index.php?action=page.redAccount.manage&page=detail&recordId="+recordId;
+        var url = "<?php echo $serverAddress; ?>/index.php?action=page.manage&page=detail&recordId=" + recordId;
         openPage(url);
     });
 
     var currentPageNum = 1;
     var loading = true;
     var wrapperDivHeight = $(".wrapper")[0].clientHeight;
-    $(".bill-log-div")[0].style.height = Number(wrapperDivHeight-20)+"px";
+    $(".bill-log-div")[0].style.height = Number(wrapperDivHeight - 20) + "px";
 
 
     $(".bill-log-div").scroll(function () {
         //判断是否滑动到页面底部
-        var errorLogDiv =  $(".bill-log-div")[0];
+        var errorLogDiv = $(".bill-log-div")[0];
         var sh = errorLogDiv.scrollHeight;
-        var ch  = errorLogDiv.clientHeight;
+        var ch = errorLogDiv.clientHeight;
         var st = $('.bill-log-div').scrollTop();
 
-        console.log("sh - ch - st---"+sh - ch - st);
-        if((sh - ch - st) <= 1){
+        if ((sh - ch - st) <= 1) {
             if (!loading) {
                 return;
             }
@@ -110,16 +104,13 @@
     });
 
     function loadMoreRecords() {
-
         var data = {
             'pageNum': ++currentPageNum,
-            "operation":"results",
         };
 
-        var url = "index.php?action=page.redAccount.manage";
+        var url = "<?php echo $serverAddress; ?>/index.php?action=page.manage";
         zalyjsCommonAjaxPostJson(url, data, handleLoadMoreRecordsResponse)
     }
-
 
     function handleLoadMoreRecordsResponse(url, data, result) {
         if (result) {
@@ -130,7 +121,7 @@
             if (datas && datas.length > 0) {
                 $.each(datas, function (index, record) {
                     var html = template("tpl-record", {
-                        id:record.id,
+                        id: record.id,
                     });
                     $(".table").append(html);
                 });

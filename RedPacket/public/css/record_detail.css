@@ -129,4 +129,5 @@ html, body {
     margin-top: 31px;
     outline: none;
     cursor: pointer;
+    border-width: 0px;
 }

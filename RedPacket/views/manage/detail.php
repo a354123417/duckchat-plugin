@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="./public/css/record_detail.css"/>
+    <link rel="stylesheet" href="./public/css/record_detail.css?v=2"/>
 
 </head>
 
@@ -15,32 +15,25 @@
     <div class="wrapper" id="wrapper">
         <div class="layout-all-row">
             <div class="list-item-center">
-                <div class="item-row" id="mini-program-id">
+
+                <div class="item-row">
                     <div class="item-body">
                         <div class="item-body-display">
-                            <div class="item-body-desc">
-                               时间
-                            </div>
+                            <div class="item-body-desc">ID</div>
 
-                            <div class="item-body-tail">
-                                2018-09-12
-                            </div>
+                            <div class="item-body-tail"><?php echo $record["id"]; ?></div>
                         </div>
 
                     </div>
                 </div>
                 <div class="division-line"></div>
 
-
-                <div class="item-row" id="user-manage-id">
+                <div class="item-row">
                     <div class="item-body">
                         <div class="item-body-display">
-                            <div class="item-body-desc">
-                                ID
-                            </div>
+                            <div class="item-body-desc">时间</div>
 
-                            <div class="item-body-tail">
-                               少爷
+                            <div class="item-body-tail"><?php echo date("H:i", $record['createTime'] / 1000); ?>
                             </div>
                         </div>
 
@@ -56,7 +49,7 @@
                             </div>
 
                             <div class="item-body-tail">
-                                30元
+                                <?php echo $record["amount"]; ?>
                             </div>
                         </div>
                     </div>
@@ -71,7 +64,13 @@
                             </div>
 
                             <div class="item-body-tail">
-                                未提现
+                                <?php if ($record['type'] == 1) { ?>
+                                    <div class="row-head cell">
+                                        充值<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
+                                <?php } elseif ($record['type'] == 2) { ?>
+                                    <div class="row-head cell">
+                                        提现<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -83,7 +82,11 @@
 
         </div>
     </div>
-    <button class="confirm_operation" record-id="111111">确认并执行操作</button>
+
+
+    <?php if ($record['status'] == 0) { ?>
+        <button class="confirm_operation" record-id="<?php echo $record["id"]; ?>">确认并执行操作</button>
+    <?php } ?>
 
 
 </div>
@@ -101,16 +104,16 @@
     }
 
     $(".confirm_operation").on("click", function () {
-       var recordId = $(this).attr("record-id");
-       //todo post
+        var recordId = $(this).attr("record-id");
         var data = {
-            recordId:recordId
+            "recordId": recordId
         };
-        var url = "index.php?action=page.redAccount.manage";
+        var url = "<?php echo $serverAddress;?>/index.php?action=api.manage.confirm";
         zalyjsCommonAjaxPostJson(url, data, handleConfirmOperationResponse)
     });
 
-    function handleConfirmOperationResponse() {
+    function handleConfirmOperationResponse(url, data, result) {
+        alert(result);
         window.location.reload();
     }
 

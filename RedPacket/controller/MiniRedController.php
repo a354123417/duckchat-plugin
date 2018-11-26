@@ -124,4 +124,13 @@ abstract class MiniRedController extends MiniProgramController
         return 0;
     }
 
+    function getServerAddress()
+    {
+        $scheme = $_SERVER['REQUEST_SCHEME'];
+        $serverHost = $_SERVER['HTTP_HOST'];
+
+        $serverAddress = $scheme . "://" . $serverHost;
+        return $serverAddress;
+    }
+
 }

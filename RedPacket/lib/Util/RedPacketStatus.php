@@ -12,6 +12,9 @@ class RedPacketStatus
     const AccountRechargeType = 1;
     const AccountWithdrawType = 2;
 
+    const AccountTodoStatus = 0;    //处理中
+    const AccountDoneStatus = 1;    //处理完成
+
     //红包状态
     const grabbingStatus = 0;
     const grabbedStatus = 1;
