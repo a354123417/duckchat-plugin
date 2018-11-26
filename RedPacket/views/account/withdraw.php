@@ -27,20 +27,13 @@
     </div>
 </div>
 <script type="text/javascript" src="./public/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../public/manage/native.js"></script>
 <script type="text/javascript" src="./public/sdk/zalyjsNative.js"></script>
 <script type="text/javascript">
 
     $(".withdraw_money").on("input porpertychange", function () {
         checkOperstaionButtonStatus();
     });
-
-    $(".confirm_operation").on("click", function () {
-        var money = $(".withdraw_money").val();
-        //TODO post withdraw
-
-        alert("withDraw money=" + money);
-    });
-
 
     $(".withdraw_all").on("click", function () {
         var allMoney = $(".all_money").html();
@@ -58,6 +51,27 @@
         $(".confirm_operation").addClass("submit_disable");
         $(".confirm_operation").removeClass("submit");
     }
+
+
+    $(".confirm_operation").on("click", function () {
+        var money = $(".withdraw_money").val();
+
+        alert("withDraw money=" + money);
+
+        var url = "./index.php?action=api.account.withdraw";
+        var data = {
+            "money": money,
+        };
+
+        zalyjsCommonAjaxPostJson(url, data, withdrawResponse);
+    });
+
+
+    function withdrawResponse(url, data, result) {
+        alert(result);
+
+    }
+
 </script>
 </body>
 </html>

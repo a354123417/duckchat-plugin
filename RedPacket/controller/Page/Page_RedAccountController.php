@@ -37,7 +37,7 @@ class Page_RedAccountController extends MiniRedController
     private function getAccountRecords($userId)
     {
         $records = $this->ctx->DuckChatUserAccountRecordsDao->queryAccountRecords($userId);
-        error_log("================get user account records=" . var_export($records, true));
+        error_log("=========get user account records=" . var_export($records, true));
         return $records;
     }
 

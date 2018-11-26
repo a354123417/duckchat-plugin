@@ -47,7 +47,7 @@
         alert("money=" + money);
         alert("remark=" + remark);
 
-        var url = "./index.php?action=";
+        var url = "./index.php?action=api.account.recharge";
         var data = {
             "money": money,
             "remark": remark
@@ -57,7 +57,8 @@
     });
 
     function rechargeResponse(url, data, result) {
-
+        alert("result= " + result);
+        zalyjsClosePage();
     }
 
 </script>
