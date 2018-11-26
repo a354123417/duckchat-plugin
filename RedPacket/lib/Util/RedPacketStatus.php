@@ -8,6 +8,11 @@
 
 class RedPacketStatus
 {
+    //账户充值
+    const AccountRechargeType = 1;
+    const AccountWithdrawType = 2;
+
+    //红包状态
     const grabbingStatus = 0;
     const grabbedStatus = 1;
 }

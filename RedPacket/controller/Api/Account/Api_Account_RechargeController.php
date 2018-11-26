@@ -22,7 +22,37 @@ class Api_Account_RechargeController extends MiniRedController
      */
     protected function doPost()
     {
+        $params = [
+            "errCode" => "error",
+        ];
+        $money = trim($_POST['money']);
+        $remarks = "";
 
+        if (empty($money)) {
+            $params["errInfo"] = "金额不能为空";
+        } else {
+            $result = $this->rechargeMoney($this->userId, $money, $remarks);
+            if ($result) {
+                $params["errCode"] = "success";
+            } else {
+                $params["errInfo"] = "充值失败，请重试";
+            }
+        }
 
+        echo json_encode($params);
+        return;
     }
+
+
+    private function rechargeMoney($userId, $money, $remarks)
+    {
+        $data = [
+            "userId" => $userId,
+            "amount" => $money,
+            "type" => RedPacketStatus::AccountRechargeType, // 1：充值 2：提现
+            "remarks" => $remarks,
+        ];
+        return $this->ctx->DuckChatUserAccountRecordsDao->addAccountRecords($data);
+    }
+
 }

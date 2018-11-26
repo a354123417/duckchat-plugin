@@ -50,7 +50,7 @@ class DuckChatUserAccountRecordsDao extends BaseDao
             $this->handlePrepareError($tag, $prepare);
             $prepare->bindValue(":userId", $userId);
             $flag = $prepare->execute();
-            $result = $prepare->fetch(\PDO::FETCH_ASSOC);
+            $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
             if ($flag && $result) {
                 return $result;
             }

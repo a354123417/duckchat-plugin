@@ -22,20 +22,26 @@
             <div class="bill-log-div" style="margin-top:10px;">
                 <div class="table">
                     <div class="row" style="border-top: 1px solid #999999;">
-                        <div class="row-head cell">时间</div>
                         <div class="row-head cell">ID</div>
+                        <div class="row-head cell">时间</div>
                         <div class="row-head cell">金额</div>
                         <div class="row-head cell">状态</div>
                         <div class="data cell">答复</div>
                     </div>
 
                     <?php foreach ($records as $record) { ?>
-                        <div class="row bill_id_<?php echo $log['id'] ?>" style="border-top: 1px solid #999999;">
-                            <div class="row-head cell"><?php echo $record['createTime'] ?></div>
-                            <div class="row-head cell"><?php echo $record['loginName'] ?></div>
-                            <div class="row-head cell"><?php echo $record['money'] ?></div>
-                            <div class="row-head cell"><?php echo $record['status'] ?></div>
-                            <div class="data cell"><?php echo $record['reply'] ?></div>
+                        <div class="row bill_id_<?php echo $record['id'] ?>" style="border-top: 1px solid #999999;">
+                            <div class="row-head cell"><?php echo $record['id'] ?></div>
+                            <div class="row-head cell"><?php echo date("H:i", $record['createTime'] / 1000); ?></div>
+                            <div class="row-head cell"><?php echo $record['amount'] ?></div>
+
+                            <?php if ($record['status'] == 1) { ?>
+                                <div class="row-head cell">完成</div>
+                            <?php } else { ?>
+                                <div class="row-head cell">处理中</div>
+                            <?php } ?>
+
+                            <div class="data cell"><?php echo $record['status'] ?></div>
                         </div>
                     <?php } ?>
 
