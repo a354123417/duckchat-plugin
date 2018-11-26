@@ -91,7 +91,13 @@ abstract class MiniProgramController extends \Wpf_Controller
             $this->action = $action;
 
             if (!in_array($action, $this->whiteAction)) {
-                $duckchatSessionId = $_COOKIE["duckchat_sessionid"];
+
+                //兼容web
+                $duckchatSessionId = $_GET["duckchat_sessionid"];
+
+                if (empty($duckchatSessionId)) {
+                    $duckchatSessionId = $_COOKIE["duckchat_sessionid"];
+                }
 
                 if (empty($duckchatSessionId)) {
                     throw new Exception("duckchat_sessionid is empty in cookie");
