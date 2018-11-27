@@ -141,8 +141,10 @@ body, html {
 }
 
 .row-head {
-    width: 25%;
+    display: inline-block;
+    width: 60px;
     justify-content: center;
+    word-wrap: break-word;
 }
 
 .operation {
