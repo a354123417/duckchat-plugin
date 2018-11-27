@@ -11,12 +11,12 @@ class ZalyConfig
     private static $sampleConfig = array(
         'miniProgramId' => 200,
         'miniProgramName' => '红包',
-        'miniProgramSecretKey' => 'Q968Pix85z2wLRDqZ4C89Bgg0mb5Apvz',
-        'duckChatAddress' => "http://192.168.3.4:8888/",
+        'miniProgramSecretKey' => '',
+        'duckChatAddress' => "",
         "mysql" => [
             "host" => "127.0.0.1",
             "port" => 3306,
-            "dbName" => "redPacket_test001",
+            "dbName" => "DuckChat_RedPacket",
             "user" => "duckchat",
             "password" => "1234567890",
         ],
