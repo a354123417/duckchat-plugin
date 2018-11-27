@@ -3,7 +3,7 @@
 <head>
     <title>红包</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../public/css/grabber.css?v=0.2"/>
+    <link rel="stylesheet" href="../../public/css/grabber.css?v=1"/>
 </head>
 <style>
 </style>
@@ -42,10 +42,13 @@
                                 <div class="grab-time"><?php echo date("H:i", $grabber['grabTime'] / 1000); ?></div>
                             </div>
                             <div class="item-body-tail">
-                                <div class="grab-amount"><?php echo $grabber['amount']; ?>元</div>
+                                <div class="grab-amount"><?php echo $grabber['amount']; ?> 元</div>
 
-                                <?php if (true) { ?>
-                                    <div class="grab-top">手气最佳</div>
+                                <?php if (isset($grabber["luckDucker"])) { ?>
+                                    <div class="grab-top">
+                                        <div><img class="luck-star" src="./public/img/luck-star.png"></div>
+                                        <div>手气最佳</div>
+                                    </div>
                                 <?php } ?>
                             </div>
                         </div>

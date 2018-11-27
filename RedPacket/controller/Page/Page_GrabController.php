@@ -92,7 +92,7 @@ class Page_GrabController extends MiniRedController
      */
     protected function doPost()
     {
-        return true;
+        return false;
     }
 
     private function isPacketGrabber($packetId, $userId)

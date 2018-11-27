@@ -125,7 +125,7 @@ class DuckChatUserAccountRecordsDao extends BaseDao
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $startTime = $this->getCurrentTimeMills();
-        $sql = "select $this->queryColumns from $this->table where userId=:userId;";
+        $sql = "select $this->queryColumns from $this->table where userId=:userId order by id desc;";
 
         try {
             $prepare = $this->db->prepare($sql);
@@ -180,8 +180,8 @@ class DuckChatUserAccountRecordsDao extends BaseDao
             $prepare->bindValue(":limit", $pageSize, PDO::PARAM_INT);
 
             $flag = $prepare->execute();
-
             $result = $prepare->fetchAll(\PDO::FETCH_ASSOC);
+            
             if ($flag && $result) {
                 return $result;
             }

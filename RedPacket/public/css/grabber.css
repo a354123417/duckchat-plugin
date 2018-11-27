@@ -159,6 +159,7 @@ html, body {
 
 .item-body-tail {
     margin-right: 10px;
+    justify-content: right;
 }
 
 .item-body-desc {
@@ -206,6 +207,7 @@ html, body {
     line-height: 16px;
     margin-top: 8px;
     margin-bottom: 4px;
+    text-align: right;
 }
 
 .grab-top {
@@ -217,4 +219,13 @@ html, body {
     line-height: 16px;
     margin-top: 4px;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+.luck-star {
+    width: 18px;
+    height: 15px;
+    margin-right: 6px;
 }

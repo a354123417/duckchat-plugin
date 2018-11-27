@@ -27,8 +27,7 @@ class Page_IndexController extends MiniRedController
      */
     protected function doPost()
     {
-        // TODO: Implement doPost() method.
-        error_log("===========do post request");
+        return false;
     }
 
 }
