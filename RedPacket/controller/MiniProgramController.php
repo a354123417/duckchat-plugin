@@ -143,7 +143,14 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected function getRequestParams()
     {
-        $duckPageUrl = $_COOKIE["duckchat_page_url"];
+        $duckPageUrl = isset($_GET["duckchat_page_url"]) ? trim($_GET["duckchat_page_url"]) : false;
+
+        if (empty($duckPageUrl)) {
+            $duckPageUrl = isset($_COOKIE["duckchat_page_url"]) ? trim($_COOKIE["duckchat_page_url"]) : false;
+        } else {
+            setcookie("duckchat_page_url", $duckPageUrl);
+        }
+
         $urlParams = parse_url($duckPageUrl);
 
         parse_str(trim($urlParams['query']), $queries);
