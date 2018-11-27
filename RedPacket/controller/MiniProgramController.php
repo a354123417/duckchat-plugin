@@ -151,6 +151,8 @@ abstract class MiniProgramController extends \Wpf_Controller
             setcookie("duckchat_page_url", $duckPageUrl);
         }
 
+        error_log("=================duckchat_page_url=" . $duckPageUrl);
+
         $urlParams = parse_url($duckPageUrl);
 
         parse_str(trim($urlParams['query']), $queries);
