@@ -45,11 +45,11 @@
 
                             <div class="row-head cell">
                                 <?php if ($record['status'] == -1) { ?>
-                                    拒绝<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>
+                                    [<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>]已拒绝
                                 <?php } elseif ($record['status'] == 0) { ?>
-                                    <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>中
+                                    [<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>]中
                                 <?php } elseif ($record['status'] == 1) { ?>
-                                    <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>完成
+                                    [<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>]完成
                                 <?php } ?>
                             </div>
                             <div class="data cell"></div>

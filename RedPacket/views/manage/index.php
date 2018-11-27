@@ -36,13 +36,15 @@
                                 <div class="row-head cell"><?php echo $record['amount'] ?></div>
 
 
-                                <?php if ($record['type'] == 1) { ?>
-                                    <div class="row-head cell">
-                                        充值<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
-                                <?php } elseif ($record['type'] == 2) { ?>
-                                    <div class="row-head cell">
-                                        提现<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
-                                <?php } ?>
+                                <div class="row-head cell">
+                                    <?php if ($record['status'] == -1) { ?>
+                                        [<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>]已拒绝
+                                    <?php } elseif ($record['status'] == 0) { ?>
+                                        [<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>]中
+                                    <?php } elseif ($record['status'] == 1) { ?>
+                                        [<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>]完成
+                                    <?php } ?>
+                                </div>
 
                                 <div class="data cell operation" record-id="<?php echo $record['id'] ?>">
                                     详情
@@ -127,17 +129,26 @@
                 $.each(datas, function (index, record) {
 
                     var statusText = "";
-                    if (record.type == 1) {
-                        if (record.status == 1) {
-                            statusText = "充值完成";
-                        } else {
-                            statusText = "充值中";
+
+                    if (record.status == -1) {
+
+                        if (record.type == 1) {
+                            statusText = "[充值]已拒绝";
+                        } else if (record.type == 2) {
+                            statusText = "[提现]已拒绝";
                         }
-                    } else if (record.type == 2) {
-                        if (record.status == 1) {
-                            statusText = "提现完成";
-                        } else {
-                            statusText = "提现中";
+
+                    } else if (record.status == 0) {
+                        if (record.type == 1) {
+                            statusText = "[充值]中";
+                        } else if (record.type == 2) {
+                            statusText = "[提现]中";
+                        }
+                    } else if (record.status == 1) {
+                        if (record.type == 1) {
+                            statusText = "[充值]完成";
+                        } else if (record.type == 2) {
+                            statusText = "[提现]完成";
                         }
                     }
 
