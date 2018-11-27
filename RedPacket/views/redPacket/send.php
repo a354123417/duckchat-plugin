@@ -126,6 +126,19 @@
             resize: none;
         }
 
+        .wrapper {
+            position: relative;
+        }
+        .tip{
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            height:30px;
+            line-height: 30px;
+            color: white;
+            background: rgba(255,159,0,0.6);
+            display: none;
+        }
     </style>
 
 </head>
@@ -133,6 +146,7 @@
 <body>
 
 <div class="wrapper" id="wrapper">
+    <div class="tip">每个人最少一分钱</div>
 
     <!--  site basic config  -->
     <div class="layout-all-row">
@@ -300,6 +314,12 @@
         var trueAmount = $("#rp-amount-input").val();
         var quantity = $("#rp-quantity-input").val();
         var isQuantity = checkQuantity(quantity, trueAmount);
+        if(quantity != undefined && quantity != "" && isQuantity == false) {
+            $(".tip")[0].style.display = "block";
+            setTimeout(function () {
+                $(".tip")[0].style.display = "none";
+            }, 1000);
+        }
         var isAmount = checkMoney(trueAmount);
         if (isQuantity && isAmount) {
             $(".red_packet_send").addClass("red_packet_send_enable");
