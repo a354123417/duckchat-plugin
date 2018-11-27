@@ -41,6 +41,7 @@ class DuckChatRedPacketGrabberDao extends BaseDao
     public function lockRedPacket($id)
     {
         $sql = "select status from $this->table where id=$id for update nowait;";
+        $sql = "select status from $this->table where id=$id for update;";
 
         $prepare = $this->db->prepare($sql);
 

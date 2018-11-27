@@ -64,7 +64,8 @@ class DuckChatUserAccountDao extends BaseDao
     {
         $tag = __CLASS__ . "->" . __FUNCTION__;
         $startTime = $this->getCurrentTimeMills();
-        $sql = "select $this->queryColumns from $this->table where id=:id for update nowait;";
+//        $sql = "select $this->queryColumns from $this->table where id=:id for update nowait;";
+        $sql = "select $this->queryColumns from $this->table where id=:id for update;";
 
         try {
             $prepare = $this->db->prepare($sql);
@@ -75,8 +76,6 @@ class DuckChatUserAccountDao extends BaseDao
             if ($flag && $result) {
                 return $result;
             }
-        } catch (Exception $e) {
-            $this->logger->error($tag, $e);
         } finally {
             $this->logger->writeSqlLog($tag, $sql, $id, $startTime);
         }
