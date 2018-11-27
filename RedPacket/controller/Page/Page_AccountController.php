@@ -6,7 +6,7 @@
  * Time: 5:36 PM
  */
 
-class Page_RedAccountController extends MiniRedController
+class Page_AccountController extends MiniRedController
 {
 
     /**
