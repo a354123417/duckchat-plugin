@@ -21,7 +21,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected $ctx;
 
-    protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
+    protected $language = 1;
     protected $requestData;
     protected $whiteAction = [
     ];
@@ -181,7 +181,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected function getLanguageText($zhText, $enText)
     {
-        return $this->language == Zaly\Proto\Core\UserClientLangType::UserClientLangZH ? $zhText : $enText;
+        return $this->language == 1 ? $zhText : $enText;
     }
 
 }
