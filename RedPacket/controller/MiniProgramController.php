@@ -151,23 +151,14 @@ abstract class MiniProgramController extends \Wpf_Controller
             setcookie("duckchat_page_url", $duckPageUrl);
         }
 
-        error_log("=================duckchat_page_url=" . $duckPageUrl);
-        error_log("=================get=" . var_export($_GET, true));
-
         $urlParams = parse_url($duckPageUrl);
 
         parse_str(trim($urlParams['query']), $queries);
 
         $pageType = isset($queries['page']) ? $queries['page'] : "";
 
-        $roomId = isset($queries['x']) ? $queries['x'] : false;
-
-        if ($roomId == false) {
-            $roomId = $_GET["x"];
-        }
-
         $params = [
-            "roomId" => $roomId,
+            "roomId" => $queries['x'],
         ];
 
         if ("groupMsg" == $pageType) {
