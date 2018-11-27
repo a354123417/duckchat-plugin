@@ -46,15 +46,14 @@ class Page_GrabController extends MiniRedController
             'packetId' => $packetId,
             'redPacketQuantity' => $redPacketQuantity,
             'sendUserNickname' => $sendUserNickname,
-            'sendUserAvatar' => $this->siteAddress . "/_api_file_download_/?fileId=" . $sendUserAvatar,
+            'sendUserAvatar' => $this->getAvatarPath($sendUserAvatar),
             'redPacketAmount' => $redPacketAmount . "元",
             'redPacketDesc' => !empty($redPacketDesc) ? $redPacketDesc : "恭喜发财，万事如意",
         ];
 
 
         $redPacketOverTime = false;
-//        if ($redPacketSendTime < $this->getCurrentTimeMills() - 24 * 60 * 60 * 1000) {
-        if ($redPacketSendTime < $this->getCurrentTimeMills() - 60 * 1000) {
+        if ($redPacketSendTime < $this->getCurrentTimeMills() - 24 * 60 * 60 * 1000) {
             $redPacketOverTime = true;
         }
 
