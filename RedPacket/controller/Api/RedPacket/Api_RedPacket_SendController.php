@@ -57,7 +57,7 @@ class Api_RedPacket_SendController extends MiniRedController
             $result = $this->sendRedPacket($packetId, $userId, $userAmount, $sendAmount, $quality, $description, $isGroup, $roomId);
             if ($result) {
                 $params["errCode"] = "success";
-                $this->proxyRedPacketMessage($packetId, $isGroup, $roomId);
+                $this->proxyRedPacketMessage($packetId, $isGroup, $roomId, $description);
             }
         } catch (Exception $e) {
             $params["errInfo"] = $e->getMessage();
@@ -140,7 +140,7 @@ class Api_RedPacket_SendController extends MiniRedController
         return $result;
     }
 
-    private function proxyRedPacketMessage($packetId, $isGroup, $roomId)
+    private function proxyRedPacketMessage($packetId, $isGroup, $roomId, $redPacketDesc)
     {
         $serverAddress = $this->getServerAddress();
 
@@ -152,6 +152,11 @@ class Api_RedPacket_SendController extends MiniRedController
         $height = 84;
         $cssAddress = $serverAddress . "/public/manage/red.css?version=200";
         $iconAddress = $serverAddress . "/public/img/red-icon.png";
+
+        if (empty($redPacketDesc)) {
+            $redPacketDesc = "恭喜发财，万事如意！";
+        }
+
         $webCode = '<!DOCTYPE html>
                         <html>
                         <head>
@@ -165,7 +170,7 @@ class Api_RedPacket_SendController extends MiniRedController
                             <div class="red_packet_show red_packet_content">
                                 <div class="red-desc"><img class="red-icon" src="' . $iconAddress . '"></div>
                                 <div class="red-desc">
-                                    <div class="red-desc-text">恭喜发财，万事如意！</div>
+                                    <div class="red-desc-text">' . $redPacketDesc . '</div>
                                     <div class="red-see-text">查看红包</div>
                                 </div>
                             </div>
