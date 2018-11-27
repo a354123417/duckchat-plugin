@@ -30,7 +30,7 @@ class Page_AccountController extends MiniRedController
                 if (empty($account)) {
                     $params["account"] = [
                         "userId" => $this->userId,
-                        "amount" => 0,
+                        "amount" => 0.00,
                     ];
                 } else {
                     $params["account"] = $account;
