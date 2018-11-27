@@ -152,6 +152,7 @@ abstract class MiniProgramController extends \Wpf_Controller
         }
 
         error_log("=================duckchat_page_url=" . $duckPageUrl);
+        error_log("=================get=" . var_export($_GET, true));
 
         $urlParams = parse_url($duckPageUrl);
 
