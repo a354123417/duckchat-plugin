@@ -26,7 +26,16 @@ class Page_AccountController extends MiniRedController
                 break;
             default:
                 $account = $this->getUserAccount($this->userId);
-                $params["account"] = $account;
+
+                if (empty($account)) {
+                    $params["account"] = [
+                        "userId" => $this->userId,
+                        "amount" => 0,
+                    ];
+                } else {
+                    $params["account"] = $account;
+                }
+
                 $params["records"] = $this->getAccountRecords($this->userId);
                 echo $this->display("account_index", $params);
         }
