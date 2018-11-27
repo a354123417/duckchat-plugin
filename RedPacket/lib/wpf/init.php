@@ -6,6 +6,7 @@
  */
 
 define("WPF_START_TIME", microtime(true));
+define("WPF_ROOT_DIR", dirname(__FILE__) . '/../../');
 define("WPF_LIB_DIR", dirname(__FILE__) . '/../');
 
 //设置配置项
