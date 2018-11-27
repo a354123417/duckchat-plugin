@@ -96,7 +96,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
             if (!in_array($action, $this->whiteAction)) {
                 //兼容web
-                $duckchatSessionId = trim($_GET["duckchat_sessionid"]);
+                $duckchatSessionId = isset($_GET["duckchat_sessionid"]) ? trim($_GET["duckchat_sessionid"]) : false;
 
                 if (empty($duckchatSessionId)) {
                     $duckchatSessionId = trim($_COOKIE["duckchat_sessionid"]);
@@ -183,5 +183,5 @@ abstract class MiniProgramController extends \Wpf_Controller
     {
         return $this->language == 1 ? $zhText : $enText;
     }
-    
+
 }
