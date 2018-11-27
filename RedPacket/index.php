@@ -5,6 +5,7 @@ include_once './lib/sdk/class.dc_open_api.php';
 
 $_ENV['WPF_URL_PATH_SUFFIX'] = '/wpf';
 
+require_once (__DIR__ . "/lib/mock.php");
 
 ini_set("display_errors", "Off");
 ini_set("log_errors", "On");
