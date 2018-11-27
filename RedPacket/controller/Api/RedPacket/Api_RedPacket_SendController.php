@@ -171,7 +171,7 @@ class Api_RedPacket_SendController extends MiniRedController
                             </div>
                             <div class="red_packet_tail">
                                 <div class="tail-text">红包</div>
-                                <div class="tail-text">DuckChat</div>
+                                <div class="tail-text"></div>
                             </div>
                         </div>
                         </body>
