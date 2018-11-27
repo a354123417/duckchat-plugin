@@ -21,14 +21,13 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected $ctx;
 
-    protected $language = Zaly\Proto\Core\UserClientLangType::UserClientLangZH;
+    protected $language = 1;
     protected $requestData;
     protected $whiteAction = [
     ];
 
     private $miniProgramId = 200;
     private $miniProgramSecretKey = "Q968Pix85z2wLRDqZ4C89Bgg0mb5Apvz";   //小程序的密钥
-    protected $miniProgramAddress = "http://192.168.3.4:8088";
     protected $siteAddress = "http://192.168.3.4:8888";
 
     /**
@@ -40,6 +39,14 @@ abstract class MiniProgramController extends \Wpf_Controller
     {
         $this->ctx = $context;
         $this->logger = $context->getLogger();
+
+
+        $config = ZalyConfig::getAllConfig();
+
+        $this->siteAddress = $config["duckChatAddress"];
+        $this->miniProgramId = $config["miniProgramId"];
+        $this->miniProgramSecretKey = $config["miniProgramSecretKey"];
+
         $this->dcApi = new DC_Open_Api($this->siteAddress,
             $this->miniProgramId,
             $this->miniProgramSecretKey);
@@ -88,8 +95,6 @@ abstract class MiniProgramController extends \Wpf_Controller
             $this->action = $action;
 
             if (!in_array($action, $this->whiteAction)) {
-
-                error_log("================cookie=" . var_export($_COOKIE, true));
                 //兼容web
                 $duckchatSessionId = trim($_GET["duckchat_sessionid"]);
 
@@ -176,7 +181,7 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected function getLanguageText($zhText, $enText)
     {
-        return $this->language == Zaly\Proto\Core\UserClientLangType::UserClientLangZH ? $zhText : $enText;
+        return $this->language == 1 ? $zhText : $enText;
     }
 
 }

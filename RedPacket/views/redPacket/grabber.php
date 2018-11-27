@@ -60,12 +60,6 @@
     </div>
 </div>
 
-<!--<script type="text/javascript" src="../../public/jquery/jquery-3.3.1.min.js"></script>-->
-<!--<script type="text/javascript" src="../../public/manage/native.js"></script>-->
-<!---->
-<!--<script type="text/javascript" src="../../public/sdk/zalyjsNative.js"></script>-->
-
-
 </body>
 
 </html>

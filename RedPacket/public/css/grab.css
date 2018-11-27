@@ -58,8 +58,8 @@ html, body {
 }
 
 .red-desc {
-    width: 224px;
-    height: 24px;
+    width: 80%;
+    /*height: 40px;*/
     font-size: 24px;
     font-family: PingFangSC-Medium;
     font-weight: 500;

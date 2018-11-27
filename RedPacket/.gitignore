@@ -1,0 +1,6 @@
+config.php
+.idea/
+logs/
+.DS_Store
+.rnd
+php_error.log

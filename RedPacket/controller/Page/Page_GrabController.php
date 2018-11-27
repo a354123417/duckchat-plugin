@@ -46,10 +46,17 @@ class Page_GrabController extends MiniRedController
             'packetId' => $packetId,
             'redPacketQuantity' => $redPacketQuantity,
             'sendUserNickname' => $sendUserNickname,
-            'sendUserAvatar' => $this->siteAddress . "/_api_file_download_/?fileId=" . $sendUserAvatar,
+            'sendUserAvatar' => $this->getAvatarPath($sendUserAvatar),
             'redPacketAmount' => $redPacketAmount . "元",
             'redPacketDesc' => !empty($redPacketDesc) ? $redPacketDesc : "恭喜发财，万事如意",
         ];
+
+
+        $redPacketOverTime = false;
+        if ($redPacketSendTime < $this->getCurrentTimeMills() - 24 * 60 * 60 * 1000) {
+            $redPacketOverTime = true;
+        }
+
 
         if ($isGrabber || $isOver) {
             //get grabbers
@@ -66,8 +73,12 @@ class Page_GrabController extends MiniRedController
             }
             echo $this->display("redPacket_grabber", $params);
         } else {
-            if ($isGrabbedOver) {
-                $params['redPacketDesc'] = "手慢了，红包派完了";
+            if ($redPacketOverTime) {
+                $params['redPacketDesc'] = "该红包已超过24小时，如已领取，可查看'首页-红包'";
+            } else {
+                if ($isGrabbedOver) {
+                    $params['redPacketDesc'] = "手慢了，红包派完了";
+                }
             }
             $params["isGrabbedOver"] = $isGrabbedOver;
             echo $this->display("redPacket_grab", $params);

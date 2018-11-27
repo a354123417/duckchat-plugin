@@ -41,6 +41,10 @@ class Api_RedPacket_SendController extends MiniRedController
                 throw new Exception("发送余额错误");
             }
 
+            if (!is_numeric($quality) || $quality <= 0) {
+                throw new Exception("红包数量错误");
+            }
+
             if ($sendAmount > $userAmount) {
                 throw new Exception("账户余额不足，请联系站长充值");
             }
