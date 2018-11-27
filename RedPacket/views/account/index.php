@@ -74,12 +74,12 @@
     }
 
     $(".recharge_account").click(function () {
-        var url = "./index.php?action=page.account&page=recharge";
+        var url = "<?php echo $serverAddress;?>/index.php?action=page.account&page=recharge";
         openPage(url);
     });
 
     $(".withdraw_account").click(function () {
-        var url = "./index.php?action=page.account&page=withdraw";
+        var url = "<?php echo $serverAddress;?>/index.php?action=page.account&page=withdraw";
         openPage(url);
     });
 

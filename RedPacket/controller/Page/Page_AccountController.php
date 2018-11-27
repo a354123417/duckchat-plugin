@@ -37,6 +37,7 @@ class Page_AccountController extends MiniRedController
                 }
 
                 $params["records"] = $this->getAccountRecords($this->userId);
+                $params["serverAddress"] = $this->getServerAddress();
                 echo $this->display("account_index", $params);
         }
 
