@@ -13,6 +13,7 @@ class ZalyConfig
         'miniProgramName' => '红包',
         'miniProgramSecretKey' => '',
         'duckChatAddress' => "",
+        "initDB" => false,
         "mysql" => [
             "host" => "127.0.0.1",
             "port" => 3306,
@@ -57,4 +58,23 @@ class ZalyConfig
         self::loadConfig();
         return self::$config;
     }
+
+    public static function setInitedDB()
+    {
+        self::loadConfig();
+
+        self::$config["initDB"] = true;
+
+        $configPath = WPF_ROOT_DIR . "config.php";
+
+        $contents = var_export(self::$config, true);
+        file_put_contents($configPath, "<?php\n return {$contents};\n ");
+
+        if (function_exists("opcache_reset")) {
+            opcache_reset();
+
+        }
+        self::$config = require($configPath);
+    }
+
 }

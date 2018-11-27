@@ -183,5 +183,5 @@ abstract class MiniProgramController extends \Wpf_Controller
     {
         return $this->language == 1 ? $zhText : $enText;
     }
-
+    
 }
