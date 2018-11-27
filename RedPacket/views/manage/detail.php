@@ -123,13 +123,16 @@
                             </div>
 
                             <div class="item-body-tail">
-                                <?php if ($record['type'] == 1) { ?>
-                                    <div class="row-head cell">
-                                        充值<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
-                                <?php } elseif ($record['type'] == 2) { ?>
-                                    <div class="row-head cell">
-                                        提现<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
-                                <?php } ?>
+
+                                <div class="row-head cell">
+                                    <?php if ($record['status'] == -1) { ?>
+                                        拒绝<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>
+                                    <?php } elseif ($record['status'] == 0) { ?>
+                                        <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>中
+                                    <?php } elseif ($record['status'] == 1) { ?>
+                                        <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>完成
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -182,7 +185,17 @@
     });
 
     function handleConfirmOperationResponse(url, data, result) {
-        alert(result);
+        if (result) {
+            var res = JSON.parse(result);
+
+            if ("success" == res.errCode) {
+                alert("执行成功");
+            } else {
+                alert(res.errInfo);
+            }
+        } else {
+            alert("执行失败");
+        }
         window.location.reload();
     }
 

@@ -35,12 +35,15 @@
                             <div class="row-head cell"><?php echo date("H:i", $record['createTime'] / 1000); ?></div>
                             <div class="row-head cell"><?php echo $record['amount'] ?></div>
 
-                            <?php if ($record['status'] == 1) { ?>
-                                <div class="row-head cell">完成</div>
-                            <?php } else { ?>
-                                <div class="row-head cell">处理中</div>
-                            <?php } ?>
-
+                            <div class="row-head cell">
+                                <?php if ($record['status'] == -1) { ?>
+                                    拒绝<?php echo $record['type'] == 1 ? "充值" : "提现"; ?>
+                                <?php } elseif ($record['status'] == 0) { ?>
+                                    <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>中
+                                <?php } elseif ($record['status'] == 1) { ?>
+                                    <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>完成
+                                <?php } ?>
+                            </div>
                             <div class="data cell"><?php echo $record['status'] ?></div>
                         </div>
                     <?php } ?>

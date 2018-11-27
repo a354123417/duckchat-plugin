@@ -39,6 +39,7 @@ class Api_RedPacket_GrabController extends MiniRedController
 
             $grabbers = $this->getRedPacketGrabbers($packetId);
             $grabberCount = empty($grabbers) ? 0 : count($grabbers);
+
             if ($grabberCount < $totalAmount) {
                 $quantity = $redPacketInfo['quantity'];
                 $result = $this->grabRedPacket($packetId, $this->userId, $quantity);
@@ -46,8 +47,7 @@ class Api_RedPacket_GrabController extends MiniRedController
                     $params['errCode'] = "success";
                 }
             } else {
-                //抢光了
-                $params['errCode'] = "success";
+                $params['errCode'] = "error";
             }
         } catch (Exception $e) {
             $params['errInfo'] = $e->getMessage();

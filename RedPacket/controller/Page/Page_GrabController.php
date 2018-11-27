@@ -52,8 +52,10 @@ class Page_GrabController extends MiniRedController
         ];
 
 
-        if ($redPacketSendTime > $this->getCurrentTimeMills() - 24 * 60 * 60 * 1000) {
-
+        $redPacketOverTime = false;
+//        if ($redPacketSendTime < $this->getCurrentTimeMills() - 24 * 60 * 60 * 1000) {
+        if ($redPacketSendTime < $this->getCurrentTimeMills() - 60 * 1000) {
+            $redPacketOverTime = true;
         }
 
 
@@ -72,8 +74,12 @@ class Page_GrabController extends MiniRedController
             }
             echo $this->display("redPacket_grabber", $params);
         } else {
-            if ($isGrabbedOver) {
-                $params['redPacketDesc'] = "手慢了，红包派完了";
+            if ($redPacketOverTime) {
+                $params['redPacketDesc'] = "该红包已超过24小时，如已领取，可查看'首页-红包'";
+            } else {
+                if ($isGrabbedOver) {
+                    $params['redPacketDesc'] = "手慢了，红包派完了";
+                }
             }
             $params["isGrabbedOver"] = $isGrabbedOver;
             echo $this->display("redPacket_grab", $params);
