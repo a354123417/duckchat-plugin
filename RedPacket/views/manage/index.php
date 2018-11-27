@@ -25,7 +25,14 @@
                             <div class="row record_id_<?php echo $record['id'] ?>"
                                  style="border-top: 1px solid #999999;">
                                 <div class="row-head cell"><?php echo $record['id'] ?></div>
-                                <div class="row-head cell"><?php echo date("H:i", $record['createTime'] / 1000); ?></div>
+                                <div class="row-head cell"><?php $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+                                    $timeMillis = $record['createTime'];
+                                    if ($timeMillis >= $beginToday * 1000) {
+                                        echo date("H:i", $timeMillis / 1000);
+                                    } else {
+                                        echo date("Y-m-d H:i", $timeMillis / 1000);
+                                    }
+                                    ?></div>
                                 <div class="row-head cell"><?php echo $record['amount'] ?></div>
 
 
@@ -58,10 +65,10 @@
 <script id="tpl-record" type="text/html">
     <div class="row record_id_{{id}}" style="border-top: 1px solid #999999;">
         <div class="row-head cell">{{id}}</div>
-        <div class="row-head cell">{{loginName}}</div>
-        <div class="row-head cell">{{money}}</div>
+        <div class="row-head cell">{{createTime}}</div>
+        <div class="row-head cell">{{amount}}</div>
         <div class="row-head cell">{{status}}</div>
-        <div class="data cell operation" record-id="{{id}}">{{reply}}</div>
+        <div class="data cell operation" record-id="{{id}}"></div>
     </div>
 </script>
 
@@ -114,14 +121,32 @@
 
     function handleLoadMoreRecordsResponse(url, data, result) {
         if (result) {
-            var res = JSON.parse(result);
-
-            var datas = res['datas'];
+            var datas = JSON.parse(result);
 
             if (datas && datas.length > 0) {
                 $.each(datas, function (index, record) {
+                    alert("index=" + index + " record-id = " + record.id);
+
+                    var statusText = "";
+                    if (record.type == 1) {
+                        if (record.status == 1) {
+                            statusText = "充值完成";
+                        } else {
+                            statusText = "充值中";
+                        }
+                    } else if (record.type == 2) {
+                        if (record.status == 1) {
+                            statusText = "提现完成";
+                        } else {
+                            statusText = "提现中";
+                        }
+                    }
+
                     var html = template("tpl-record", {
                         id: record.id,
+                        createTime: timeMillisToDate(record.createTime),
+                        amount: record.amount,
+                        status: statusText,
                     });
                     $(".table").append(html);
                 });
@@ -131,6 +156,20 @@
         }
         loading = false;
     }
+
+
+    function timeMillisToDate(timeStampMillis) {
+        timeStampMillis = timeStampMillis / 1000 * 1000;
+        var time = new Date(timeStampMillis);
+        var dataTime = "";
+        dataTime += time.getUTCFullYear() + "-";
+        dataTime += (time.getUTCMonth() + 1) + "-";
+        dataTime += time.getUTCDate();
+        dataTime += " " + time.getUTCHours() + ":";
+        dataTime += time.getUTCMinutes() + ":";
+        return dataTime;
+    }
+
 </script>
 </body>
 </html>

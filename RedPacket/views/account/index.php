@@ -32,7 +32,15 @@
                     <?php foreach ($records as $record) { ?>
                         <div class="row bill_id_<?php echo $record['id'] ?>" style="border-top: 1px solid #999999;">
                             <div class="row-head cell"><?php echo $record['id'] ?></div>
-                            <div class="row-head cell"><?php echo date("H:i", $record['createTime'] / 1000); ?></div>
+                            <div class="row-head cell"><?php
+                                $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+                                $timeMillis = $record['createTime'];
+                                if ($timeMillis >= $beginToday * 1000) {
+                                    echo date("H:i", $timeMillis / 1000);
+                                } else {
+                                    echo date("Y-m-d H:i", $timeMillis / 1000);
+                                }
+                                ?></div>
                             <div class="row-head cell"><?php echo $record['amount'] ?></div>
 
                             <div class="row-head cell">
@@ -44,7 +52,7 @@
                                     <?php echo $record['type'] == 1 ? "充值" : "提现"; ?>完成
                                 <?php } ?>
                             </div>
-                            <div class="data cell"><?php echo $record['status'] ?></div>
+                            <div class="data cell"></div>
                         </div>
                     <?php } ?>
 
