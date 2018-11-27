@@ -44,8 +44,8 @@
                                         提现<?php echo $record['status'] == 1 ? "完成" : "中"; ?></div>
                                 <?php } ?>
 
-                                <div class="data cell operation"
-                                     record-id="<?php echo $record['id'] ?>"><?php echo $record['reply'] ?>详情
+                                <div class="data cell operation" record-id="<?php echo $record['id'] ?>">
+                                    详情
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -68,7 +68,7 @@
         <div class="row-head cell">{{createTime}}</div>
         <div class="row-head cell">{{amount}}</div>
         <div class="row-head cell">{{status}}</div>
-        <div class="data cell operation" record-id="{{id}}"></div>
+        <div class="data cell operation" record-id="{{id}}">详情</div>
     </div>
 </script>
 
@@ -83,7 +83,7 @@
         }
     }
 
-    $(".operation").on("click", function () {
+    $("body").on("click", ".operation", function () {
         var recordId = $(this).attr("record-id");
         var url = "<?php echo $serverAddress; ?>/index.php?action=page.manage&page=detail&recordId=" + recordId;
         openPage(url);
@@ -125,7 +125,6 @@
 
             if (datas && datas.length > 0) {
                 $.each(datas, function (index, record) {
-                    alert("index=" + index + " record-id = " + record.id);
 
                     var statusText = "";
                     if (record.type == 1) {
