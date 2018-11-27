@@ -92,7 +92,7 @@
                         <div class="item-body-display">
                             <div class="item-body-desc">时间</div>
 
-                            <div class="item-body-tail"><?php echo date("H:i", $record['createTime'] / 1000); ?>
+                            <div class="item-body-tail"><?php echo date("Y-m-d H:i", $record['createTime'] / 1000); ?>
                             </div>
                         </div>
 
