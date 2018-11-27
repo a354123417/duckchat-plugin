@@ -99,7 +99,7 @@ abstract class MiniProgramController extends \Wpf_Controller
                 $duckchatSessionId = isset($_GET["duckchat_sessionid"]) ? trim($_GET["duckchat_sessionid"]) : false;
 
                 if (empty($duckchatSessionId)) {
-                    $duckchatSessionId = trim($_COOKIE["duckchat_sessionid"]);
+                    $duckchatSessionId = isset($_COOKIE["duckchat_sessionid"]) ? trim($_COOKIE["duckchat_sessionid"]) : false;
                 } else {
                     setcookie("duckchat_sessionid", $duckchatSessionId);
                 }
