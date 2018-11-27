@@ -5,7 +5,7 @@
  * Date: 17/11/2018
  * Time: 2:25 PM
  */
-class Page_IndexController extends MiniRedController
+class Page_SendController extends MiniRedController
 {
 
     /**
