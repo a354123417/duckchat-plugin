@@ -159,8 +159,14 @@ abstract class MiniProgramController extends \Wpf_Controller
 
         $pageType = isset($queries['page']) ? $queries['page'] : "";
 
+        $roomId = isset($queries['x']) ? $queries['x'] : false;
+
+        if ($roomId == false) {
+            $roomId = $_GET["x"];
+        }
+
         $params = [
-            "roomId" => $queries['x'],
+            "roomId" => $roomId,
         ];
 
         if ("groupMsg" == $pageType) {
