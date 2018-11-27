@@ -142,7 +142,6 @@ body, html {
 
 .row-head {
     display: flex;
-    width: 60px;
     justify-content: center;
     word-wrap: break-word;
     align-items: center;
