@@ -9,6 +9,14 @@
 class Api_Manage_RecordsController extends MiniRedController
 {
 
+    protected function preRequest()
+    {
+        //管理员权限，check user is site manager
+        if (!$this->isSiteAdmin()) {
+            throw new Exception("No Permissions");
+        }
+    }
+
     /**
      * http get request
      */

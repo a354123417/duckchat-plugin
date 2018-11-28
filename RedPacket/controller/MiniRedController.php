@@ -184,4 +184,20 @@ abstract class MiniRedController extends MiniProgramController
         return $serverAddress;
     }
 
+    protected function isSiteAdmin()
+    {
+        $admins = $this->dcApi->getSiteAdmins();
+
+        $admins = json_decode($admins, true);
+
+        $adminUserIds = [];
+        if (!empty($admins)) {
+
+            $publicProfiles = $admins["body"]["publicProfiles"];
+
+            $adminUserIds = array_column($publicProfiles, "userId");
+
+        }
+        return in_array($this->userId, $adminUserIds);
+    }
 }

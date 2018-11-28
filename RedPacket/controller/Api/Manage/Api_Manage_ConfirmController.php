@@ -12,6 +12,9 @@ class Api_Manage_ConfirmController extends MiniRedController
     protected function preRequest()
     {
         //管理员权限，check user is site manager
+        if (!$this->isSiteAdmin()) {
+            throw new Exception("No Permissions");
+        }
     }
 
     /**

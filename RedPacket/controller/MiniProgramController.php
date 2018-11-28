@@ -23,8 +23,6 @@ abstract class MiniProgramController extends \Wpf_Controller
 
     protected $language = 1;
     protected $requestData;
-    protected $whiteAction = [
-    ];
 
     private $miniProgramId = 200;
     private $miniProgramSecretKey = "Q968Pix85z2wLRDqZ4C89Bgg0mb5Apvz";   //小程序的密钥
@@ -94,33 +92,31 @@ abstract class MiniProgramController extends \Wpf_Controller
             $action = $_GET['action'];
             $this->action = $action;
 
-            if (!in_array($action, $this->whiteAction)) {
-                //兼容web
-                $duckchatSessionId = isset($_GET["duckchat_sessionid"]) ? trim($_GET["duckchat_sessionid"]) : false;
+            //兼容web
+            $duckchatSessionId = isset($_GET["duckchat_sessionid"]) ? trim($_GET["duckchat_sessionid"]) : false;
 
-                if (empty($duckchatSessionId)) {
-                    $duckchatSessionId = isset($_COOKIE["duckchat_sessionid"]) ? trim($_COOKIE["duckchat_sessionid"]) : false;
-                } else {
-                    setcookie("duckchat_sessionid", $duckchatSessionId);
-                }
-
-                if (empty($duckchatSessionId)) {
-                    throw new Exception("duckchat_sessionid is empty in cookie");
-                }
-
-                $userPublicProfile = $this->dcApi->getSessionProfile($duckchatSessionId);
-
-                if (empty($userPublicProfile)) {
-                    throw new Exception("get empty user profile by duckchat_sessionid error");
-                }
-
-                $userPublicProfile = json_decode($userPublicProfile, true);
-
-                $this->userProfile = $userPublicProfile['body']['profile']['public'];
-                $this->userId = $this->userProfile['userId'];
-                $this->loginName = $userPublicProfile['body']['profile']['public']['loginName'];
-                $this->logger->info("", "Mini Program Request UserId=" . $this->userId);
+            if (empty($duckchatSessionId)) {
+                $duckchatSessionId = isset($_COOKIE["duckchat_sessionid"]) ? trim($_COOKIE["duckchat_sessionid"]) : false;
+            } else {
+                setcookie("duckchat_sessionid", $duckchatSessionId);
             }
+
+            if (empty($duckchatSessionId)) {
+                throw new Exception("duckchat_sessionid is empty in cookie");
+            }
+
+            $userPublicProfile = $this->dcApi->getSessionProfile($duckchatSessionId);
+
+            if (empty($userPublicProfile)) {
+                throw new Exception("get empty user profile by duckchat_sessionid error");
+            }
+
+            $userPublicProfile = json_decode($userPublicProfile, true);
+
+            $this->userProfile = $userPublicProfile['body']['profile']['public'];
+            $this->userId = $this->userProfile['userId'];
+            $this->loginName = $userPublicProfile['body']['profile']['public']['loginName'];
+            $this->logger->info("", "Mini Program Request UserId=" . $this->userId);
 
             $this->preRequest();
 
