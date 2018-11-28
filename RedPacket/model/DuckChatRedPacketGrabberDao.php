@@ -97,7 +97,7 @@ class DuckChatRedPacketGrabberDao extends BaseDao
         } catch (Exception $e) {
             $this->logger->error($tag, $e);
         } finally {
-            $this->logger->writeSqlLog($tag, $sql, $packetId, $startTime);
+            $this->logger->writeSqlLog($tag, $sql, [$userId, $packetId, $status], $startTime);
         }
         return false;
     }

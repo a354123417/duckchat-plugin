@@ -48,6 +48,7 @@ class Api_RedPacket_GrabController extends MiniRedController
                 }
             } else {
                 $params['errCode'] = "error";
+                $params['errInfo'] = "抢红包人数已满";
             }
         } catch (Exception $e) {
             $params['errInfo'] = $e->getMessage();
